@@ -4,13 +4,13 @@
 template <class T, std::size_t N>
 Array<T, N>::Array():
 	size_(N), 
-	ArrayInterface(size_, data_) {
+	ArrayInterface(*this) {
 }
 
 template <class T, std::size_t N>
 Array<T, N>::Array(const Array & that):
 	size_(N),
-	ArrayInterface(size_, data_) {
+	ArrayInterface(*this) {
 		for (std::size_t i = 0; i < size_; i++) {
 			data_[i] = that[i];
 		}

@@ -5,11 +5,11 @@
 
 namespace ava {
 
-	template <class T>
+	template <class T, class ContainerType>
 	class ArrayInterface {
 	public:
 		//! Constructor for operate with Static Array and Dynamic Vector with same Interface
-		ArrayInterface(std::size_t & size, T * data);
+		ArrayInterface(ContainerType & container);
 
 		//! Returns a reference to the element at specified location pos. No bounds checking is performed.
 		//!
@@ -69,8 +69,7 @@ namespace ava {
 	protected:
 		//! Out of range exception text.
 		static const std::string OUT_OF_RANGE_EXC_TEXT;
-		size_t & size_;
-		T * data_;
+		ContainerType & container_;
 	private:
 		ArrayInterface();
 		ArrayInterface(const ArrayInterface & that);
@@ -79,8 +78,9 @@ namespace ava {
 
 	//! Array with elements in dynamic memory.
 	template <class T>
-	class Vector : public ArrayInterface<T> {
+	class Vector : public ArrayInterface<T, Vector<T>> {
 	public:
+		friend ArrayInterface;
 		explicit Vector(const std::size_t size = 2);
 		Vector(const Vector & that);
 		~Vector();
@@ -102,8 +102,9 @@ namespace ava {
 
 	//! Array with elements in static memory.
 	template <class T, std::size_t N>
-	class Array : public ArrayInterface<T> {
+	class Array : public ArrayInterface<T, Array<T,N>> {
 	public:
+		friend ArrayInterface;
 		Array() ;
 		Array(const Array & that) ;
 		~Array();
