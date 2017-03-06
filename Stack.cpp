@@ -15,11 +15,11 @@ if (!isStackOk())					\
 	assert(!"Stack object is OK");	\
 }									\
 
-Stack::Stack() : capacity_(Stack::STACK_DEFAULT_CAPASITY), size_(0)
+Stack::Stack() : data_(NULL), size_(0), capacity_(Stack::STACK_DEFAULT_CAPASITY)
 {
 	try
 	{
-		data_ = new StackContentType[capacity_];
+		data_ = new Stack_Content_Type[capacity_];
 	}
 	catch (std::bad_alloc& ba)
 	{
@@ -29,11 +29,11 @@ Stack::Stack() : capacity_(Stack::STACK_DEFAULT_CAPASITY), size_(0)
 }
 
 
-Stack::Stack(size_t capacity) : capacity_(capacity), size_(0)
+Stack::Stack(size_t capacity) : data_(NULL), size_(0), capacity_(capacity)
 {
 	try
 	{
-		data_ = new StackContentType[capacity_];
+		data_ = new Stack_Content_Type[capacity_];
 	}
 	catch (std::bad_alloc& ba)
 	{
@@ -43,7 +43,7 @@ Stack::Stack(size_t capacity) : capacity_(capacity), size_(0)
 }
 
 
-Stack::Stack(const Stack& other) : size_(other.size_), capacity_(other.capacity_)
+Stack::Stack(const Stack& other) : data_(NULL), size_(other.size_), capacity_(other.capacity_)
 {
 	deepCopy(other);
 }
@@ -68,7 +68,7 @@ Stack::~Stack()
 
 void Stack::deepCopy(const Stack& other)
 {
-	data_ = new StackContentType[other.capacity_];
+	data_ = new Stack_Content_Type[other.capacity_];
 	size_t size = other.size_;
 
 	for (size_t i = 0; i < size; i++)
@@ -79,7 +79,7 @@ void Stack::deepCopy(const Stack& other)
 
 
 
-bool Stack::push(StackContentType elementToPush)
+bool Stack::push(Stack_Content_Type element_to_push)
 {
 
 	if (size_ >= capacity_)
@@ -90,13 +90,13 @@ bool Stack::push(StackContentType elementToPush)
 	else
 	{
 		ASSERT_OK();
-		data_[size_++] = elementToPush;
+		data_[size_++] = element_to_push;
 		return true;
 	}
 }
 
 
-StackContentType Stack::pop()
+Stack_Content_Type Stack::pop()
 {
 
 	if (size_ > 0)
@@ -111,7 +111,7 @@ StackContentType Stack::pop()
 }
 
 
-StackContentType Stack::top() const
+Stack_Content_Type Stack::top() const
 {
 	if (size_ > 0)
 	{
@@ -150,7 +150,7 @@ bool Stack::isStackOk() const
 
 void Stack::dump() const
 {
-	
+
 	std::string dumpContent = (size_ <= capacity_) ? "Stack (OK)\n\t{\n" : "Stack (ERROR)\n\t{\n";
 
 	dumpContent += "\tCapacity = " + std::to_string(capacity_) + "\n" + "\tSize = " + std::to_string(size_) + "\n\n\t\tdata[" + std::to_string(capacity_) + "]:\n\t\t{\n";
