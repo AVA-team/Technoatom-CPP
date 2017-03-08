@@ -13,7 +13,7 @@ ArrayInterface<T, ContainerType>::ArrayInterface(ContainerType & container):
 }
 
 template <class T, class ContainerType>
-T & ArrayInterface<T, ContainerType>::operator[](const std::size_t pos) const {
+const T & ArrayInterface<T, ContainerType>::operator[](const std::size_t pos) const {
   return data_[pos];
 }
 
