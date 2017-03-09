@@ -81,7 +81,7 @@ namespace ava {
 	class Vector : public ArrayInterface<T, Vector<T>> {
 	public:
 		friend ArrayInterface;
-		explicit Vector(const std::size_t size = 2);
+		explicit Vector(const std::size_t capacity);
 		explicit Vector(const Vector & that);
 
 		//! Fill constructor constucts a container with n elements.
@@ -108,7 +108,7 @@ namespace ava {
 		//!
 		//! @param that is array to exchange the contents with
 		void swap(Vector & that) {
-
+			std::swap(capacity_, that.capacity_);
 			std::swap(size_, that.size_);
 			std::swap(data_, that.data_);
 		}
