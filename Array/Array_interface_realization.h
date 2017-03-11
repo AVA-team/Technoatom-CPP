@@ -5,7 +5,7 @@
 #define data_ container_.data_
 
 template <class T, class ContainerType>
-const std::string  ArrayInterface<T, ContainerType>::OUT_OF_RANGE_EXC_TEXT = "Pos is more than size of the array!";
+const std::string  ArrayInterface<T, ContainerType>::OUT_OF_RANGE_EXC_TEXT = "Pos is out of range of array size!";
 
 template <class T, class ContainerType>
 ArrayInterface<T, ContainerType>::ArrayInterface(ContainerType & container): 

@@ -1,6 +1,6 @@
 #include <iostream>
 #include"gtest\gtest.h"
-#include "Array.h"
+#include "..\Array.h"
 
 TEST(Vector, Insert)
 {
@@ -14,20 +14,33 @@ TEST(Vector, Insert)
 	ASSERT_TRUE(is_ok);
 }
 
-class Vector_Object_For_Resizing_And_Assigning : public testing::Test
+
+TEST(Vector, Capacity)
+{
+	const size_t init_capacity = 15;
+	ava::Vector<int> vec(init_capacity);
+	const size_t capacity = vec.capacity();
+
+	bool is_capacity_ok = (capacity == init_capacity);
+	ASSERT_TRUE(is_capacity_ok);
+}
+
+class Vector_Object_For_Testing_Single_Vec : public testing::Test
 {
 public:
-	Vector_Object_For_Resizing_And_Assigning() :vec_(15) {
-		for (size_t i = 0; i < 10; i++) {
+	Vector_Object_For_Testing_Single_Vec() :vec_(init_capacity_) {
+		for (size_t i = 0; i < init_size_; i++) {
 			vec_.push_back(i + 1);
 		}
 	}
 
 protected:
+	const size_t init_capacity_ = 15;
+	const size_t init_size_ = 10;
 	ava::Vector<double> vec_;
 };
 
-TEST_F(Vector_Object_For_Resizing_And_Assigning, Resize_With_Reduction)
+TEST_F(Vector_Object_For_Testing_Single_Vec, Resize_With_Reduction)
 {
 	vec_.resize(5, 0);
 
@@ -43,7 +56,7 @@ TEST_F(Vector_Object_For_Resizing_And_Assigning, Resize_With_Reduction)
 	ASSERT_TRUE(are_elements_ok);
 }
 
-TEST_F(Vector_Object_For_Resizing_And_Assigning, Resize_With_Bigger_Size)
+TEST_F(Vector_Object_For_Testing_Single_Vec, Resize_With_Bigger_Size)
 {
 	vec_.resize(12, 0);
 
@@ -59,7 +72,7 @@ TEST_F(Vector_Object_For_Resizing_And_Assigning, Resize_With_Bigger_Size)
 	ASSERT_TRUE(are_elements_ok);
 }
 
-TEST_F(Vector_Object_For_Resizing_And_Assigning, Resize_With_Bigger_Capacity)
+TEST_F(Vector_Object_For_Testing_Single_Vec, Resize_With_Bigger_Capacity)
 {
 	vec_.resize(17, 0);
 
@@ -82,12 +95,12 @@ TEST_F(Vector_Object_For_Resizing_And_Assigning, Resize_With_Bigger_Capacity)
 	ASSERT_TRUE(are_elements_ok);
 }
 
-TEST_F(Vector_Object_For_Resizing_And_Assigning, Assign_With_Count_Less_Than_Capacity_And_Less_Than_Size)
+TEST_F(Vector_Object_For_Testing_Single_Vec, Assign_With_Count_Less_Than_Capacity_And_Less_Than_Size)
 {
 	vec_.assign(3, 0);
 
 	size_t size = vec_.size(), capacity = vec_.capacity();
-	bool is_size_ok = (size == 10);
+	bool is_size_ok = (size == 3);
 
 	ASSERT_TRUE(is_size_ok);
 
@@ -95,13 +108,13 @@ TEST_F(Vector_Object_For_Resizing_And_Assigning, Assign_With_Count_Less_Than_Cap
 
 	ASSERT_TRUE(is_capacity_ok);
 
-	double el_num1 = vec_[0], el_num2 = vec_[1], el_num3 = vec_[2], el_num4 = vec_[3], el_num5 = vec_[4];
-	bool are_elements_ok = (el_num1 == 0) && (el_num2 == 0) && (el_num3 == 0) && (el_num4 == 4) && (el_num5 == 5);
+	double el_num1 = vec_[0], el_num2 = vec_[1], el_num3 = vec_[2];
+	bool are_elements_ok = (el_num1 == 0) && (el_num2 == 0) && (el_num3 == 0);
 
 	ASSERT_TRUE(are_elements_ok);
 }
 
-TEST_F(Vector_Object_For_Resizing_And_Assigning, Assign_With_Count_Less_Than_Capacity_And_Bigger_Than_Size)
+TEST_F(Vector_Object_For_Testing_Single_Vec, Assign_With_Count_Less_Than_Capacity_And_Bigger_Than_Size)
 {
 	vec_.assign(12, 0);
 
@@ -120,7 +133,7 @@ TEST_F(Vector_Object_For_Resizing_And_Assigning, Assign_With_Count_Less_Than_Cap
 	ASSERT_TRUE(are_elements_ok);
 }
 
-TEST_F(Vector_Object_For_Resizing_And_Assigning, Assign_With_Count_Bigger_Than_Capacity_And_Bigger_Than_Size)
+TEST_F(Vector_Object_For_Testing_Single_Vec, Assign_With_Count_Bigger_Than_Capacity_And_Bigger_Than_Size)
 {
 	vec_.assign(17, 0);
 
@@ -137,6 +150,34 @@ TEST_F(Vector_Object_For_Resizing_And_Assigning, Assign_With_Count_Bigger_Than_C
 	bool are_elements_ok = (el_num15 == 0) && (el_num16 == 0) && (el_num17 == 0);
 
 	ASSERT_TRUE(are_elements_ok);
+}
+
+TEST_F(Vector_Object_For_Testing_Single_Vec, Reserve)
+{
+	const size_t new_less_capicity = 5;
+	ASSERT_TRUE(new_less_capicity < init_capacity_);
+	vec_.reserve(new_less_capicity);
+	ASSERT_TRUE(vec_.capacity() == init_capacity_);
+
+	const size_t new_bigger_capicity = 20;
+	ASSERT_TRUE(new_bigger_capicity > init_capacity_);
+	vec_.reserve(new_bigger_capicity);
+	ASSERT_TRUE(vec_.capacity() == new_bigger_capicity);
+
+	for (size_t i = 0; i < vec_.size(); i++) {
+		ASSERT_TRUE(vec_[i] == i + 1);
+	}
+}
+
+TEST_F(Vector_Object_For_Testing_Single_Vec, Shrink_to_fit)
+{
+	vec_.shrink_to_fit();
+	ASSERT_TRUE(init_size_ == vec_.size());
+	ASSERT_TRUE(vec_.capacity() == init_size_);
+
+	for (size_t i = 0; i < init_size_; i++) {
+		ASSERT_TRUE(vec_[i] == i + 1);
+	}
 }
 
 class Vector_Objects_For_Cheking_Equality : public testing::Test
@@ -187,6 +228,20 @@ TEST_F(Vector_Objects_For_Cheking_Equality, Check_Elements_Equality)
 	bool is_ok = (first_assigned_el_num1 == init_el_num1) && (second_assigned_el_num1 == init_el_num1)
 		&& (first_assigned_el_num2 == init_el_num2) && (second_assigned_el_num2 == init_el_num2)
 		&& (first_assigned_el_num3 == init_el_num3) && (second_assigned_el_num3 == init_el_num3);
+
+	ASSERT_TRUE(is_ok);
+}
+
+TEST_F(Vector_Objects_For_Cheking_Equality, Check_Elements_Addreses_Not_Equality)
+{
+	const int * init_p_num1 = &init_vec[0], * init_p_num2 = &init_vec[1], * init_p_num3 = &init_vec[2],
+		* first_assigned_p_num1 = &first_assigned_vec[0], * first_assigned_p_num2 = &first_assigned_vec[1], * first_assigned_p_num3 = &first_assigned_vec[2],
+		* second_assigned_p_num1 = &secong_assigned_vec[0], * second_assigned_p_num2 = &secong_assigned_vec[1], * second_assigned_p_num3 = &secong_assigned_vec[2];
+
+
+	bool is_ok = (first_assigned_p_num1 != init_p_num1) && (second_assigned_p_num1 != init_p_num1)
+		&& (first_assigned_p_num2 != init_p_num2) && (second_assigned_p_num2 != init_p_num2)
+		&& (first_assigned_p_num3 != init_p_num3) && (second_assigned_p_num3 != init_p_num3);
 
 	ASSERT_TRUE(is_ok);
 }

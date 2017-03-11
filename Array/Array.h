@@ -128,7 +128,7 @@ namespace ava {
 
 			if (size_ == 0) return;
 
-			delete data_[--size_];
+			--size_;
 		}
 
 		//! The vector is extended by inserting new elements before the element at the specified position, effectively increasing the container size by the number of elements inserted.

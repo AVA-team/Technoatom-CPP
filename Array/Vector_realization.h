@@ -20,9 +20,7 @@ Vector<T>::Vector(const Vector & that) :
 	data_(new T[that.capacity_]),
 	ArrayInterface(*this) {
 
-	for (std::size_t i = 0; i < size_; i++) {
-		data_[i] = that[i];
-	}
+	std::copy(that.data_, that.data_ + size_, data_);
 }
 
 
@@ -45,22 +43,10 @@ template<class T>
 void Vector<T>::push_back(T value_to_copy) {
 
 	std::size_t new_size = size_ + 1;
-	if (new_size <= capacity_) {
-		data_[size_++] = value_to_copy;
+	if (new_size > capacity_) {
+		reserve(capacity_ + CAPACITY_INCREMENT);
 	}
-	else {
-		T* temp_buffer = new T[size_];
-		std::copy(data_, data_ + size_, temp_buffer);
-		capacity_ += CAPACITY_INCREMENT;
-		delete[] data_;
-		data_ = new T[capacity_];
-		for (std::size_t i = 0; i < size_; i++)
-		{
-			data_[i] = temp_buffer[i];
-		}
-		data_[size_++] = value_to_copy;
-		
-	}
+	data_[size_++] = value_to_copy;
 }
 
 
@@ -69,45 +55,19 @@ void Vector<T>::insert(std::size_t pos, std::size_t elements_count, const T& val
 
 	if (pos > size_) throw std::out_of_range("Failed attempt to invoke method Vector<T>::insert()\nIndex (pos) bigger than current size\n");
 
-	std::size_t new_size = (size_ + elements_count);
-	if (new_size < capacity_) {
-		if (pos == size_) {
-			for (std::size_t i = size_; i < new_size; i++) {
-				data_[i] = value_to_copy;
-			}
-		}
-		else {
-			std::size_t buffer_length = size_ - pos;
-			T* temp_buffer = new T[buffer_length];
-			for (std::size_t i = 0; i < buffer_length; i++) {
-				temp_buffer[i] = data_[pos + i];
-			}
-			std::size_t inserting_length = (pos + elements_count);
-			for (std::size_t i = pos; i < inserting_length; i++) {
-				data_[i] = value_to_copy;
-			}
-			for (std::size_t i = (pos + elements_count); i < new_size; i++) {
-				data_[i] = temp_buffer[i - elements_count - pos];
-			}
-		}
-	}
-	else {
+	const std::size_t new_size = (size_ + elements_count);
+	const std::size_t new_elemets_end = pos + elements_count;
+
+	if (new_size > capacity_) {
 		capacity_ = new_size + CAPACITY_INCREMENT;
-		T* temp_buffer = new T[size_];
-		std::copy(data_, data_ + size_, temp_buffer);
-		clear();
-		data_ = new T[capacity_];
-		for (std::size_t i = 0; i < new_size; i++) {
-			if (i < pos) {
-				data_[i] = temp_buffer[i];
-			}
-			else if (i < (pos + elements_count)) {
-				data_[i] = value_to_copy;
-			}
-			else {
-				data_[i] = temp_buffer[i - elements_count - pos];
-			}
-		}
+		auto new_data = new T[capacity_];
+		std::copy(data_, data_ + pos, new_data);
+		delete[] data_;
+		data_ = new_data;
+	}
+	std::copy_backward(data_ + pos, data_ + size_, data_ + new_size);
+	for (std::size_t i = pos; i < new_elemets_end; i++) {
+		data_[i] = value_to_copy;
 	}
 	size_ = new_size;
 }
@@ -115,38 +75,13 @@ void Vector<T>::insert(std::size_t pos, std::size_t elements_count, const T& val
 
 template<class T>
 void Vector<T>::resize(std::size_t new_size, T value_to_copy = T()) {
-
 	if (new_size == size_) return;
 
 	if (new_size > capacity_) {
-		T* temp_buffer = new T[size_];
-		std::copy(data_, data_ + size_, temp_buffer);
-		capacity_ = new_size + CAPACITY_INCREMENT;
-		delete[] data_;
-		data_ = new T[capacity_];
-		for (std::size_t i = 0; i < size_; i++) {
-			data_[i] = temp_buffer[i];
-		}
-		for (size_t i = size_; i < new_size; i++) {
-			data_[i] = value_to_copy;
-		}
+		reserve(new_size + CAPACITY_INCREMENT);
 	}
-	else {
-		if (new_size < size_) {
-			T* temp_buffer = new T[new_size];
-			std::copy(data_, data_ + new_size, temp_buffer);
-			delete[] data_;
-			data_ = new T[capacity_];
-			for (size_t i = 0; i < new_size; i++) {
-				data_[i] = temp_buffer[i];
-			}
-		}
-		else {
-			for (size_t i = size_; i < new_size; i++) {
-				data_[i] = value_to_copy;
-			}
-		}
-
+	for (size_t i = size_; i < new_size; i++) {
+		data_[i] = value_to_copy;
 	}
 	size_ = new_size;
 }
@@ -158,70 +93,35 @@ void Vector<T>::reserve(std::size_t new_capacity) {
 	if (new_capacity <= capacity_) return;
 	else {
 		capacity_ = new_capacity;
-		T* temp_buffer = new T[size_];
-		std::copy(data_, data_ + size_, temp_buffer);
+		auto new_data = new T[capacity_];
+		std::copy(data_, data_ + size_, new_data);
 		delete[] data_;
-		data_ = new T[capacity_];
-		for (size_t i = 0; i < size_; i++)
-		{
-			data_[i] = temp_buffer[i];
-		}
+		data_ = new_data;
 	}
 }
 
 
 template<class T>
 void Vector<T>::shrink_to_fit() {
-
 	capacity_ = size_;
-	T* temp_buffer = new T[size_];
-	std::copy(data_, data_ + size_, temp_buffer);
+	auto new_data = new T[capacity_];
+	std::copy(data_, data_ + size_, new_data);
 	delete[] data_;
-	data_ = new T[capacity_];
-	for (size_t i = 0; i < size_; i++) {
-		data_[i] = temp_buffer[i];
-	}
+	data_ = new_data;
 }
 
 
 template<class T>
 void Vector<T>::assign(std::size_t count, const T& value_to_copy) {
-	
-	if (count <= capacity_) {
-		if (count < size_) {
-			std::size_t buffer_size = size_ - count;
-			T* temp_buffer = new T[buffer_size];
-			std::copy(data_ + count, data_ + size_, temp_buffer);
-			delete[] data_;
-			data_ = new T[capacity_];
-			for (std::size_t i = 0; i < size_; i++) {
-				if (i < count) {
-					data_[i] = value_to_copy;
-				}
-				else {
-					data_[i] = temp_buffer[i - count];
-				}
-			}
-		}
-		else {
-			delete[] data_;
-			data_ = new T[capacity_];
-			for (std::size_t i = 0; i < count; i++) {
-				data_[i] = value_to_copy;
-			}
-			size_ = count;
-		}
-	}
-	else {
-		clear();
-		size_ = count;
+	size_ = count;
+	if (count > capacity_) {
 		capacity_ = size_ + CAPACITY_INCREMENT;
+		delete[] data_;
 		data_ = new T[capacity_];
-		for (std::size_t i = 0; i < size_; i++)
-		{
-			data_[i] = value_to_copy;
-		}
-		
+	}
+	for (std::size_t i = 0; i < size_; i++)
+	{
+		data_[i] = value_to_copy;
 	}
 }
 
