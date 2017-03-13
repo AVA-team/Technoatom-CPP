@@ -1,6 +1,29 @@
 #include <iostream>
 #include"gtest\gtest.h"
-#include "..\Array.h"
+#include "..\Vector.h"
+
+TEST(Vector, Constructor_with_capacity)
+{
+	ava::Vector<int> vec_with_default_capacity;
+	ASSERT_TRUE(vec_with_default_capacity.capacity() == ava::standart_init_capacity);
+	ASSERT_TRUE(vec_with_default_capacity.size() == 0);
+
+	const size_t init_capacity = 10;
+	ava::Vector<int> vec(init_capacity);
+	ASSERT_TRUE(vec_with_default_capacity.capacity() == init_capacity);
+	ASSERT_TRUE(vec_with_default_capacity.size() == 0);
+}
+
+TEST(Vector, Constructor_with_size_and_value)
+{
+	const size_t init_size = 10;
+	const int init_value = 5;
+	ava::Vector<int> vec(init_size, init_value);
+	ASSERT_TRUE(vec.size() == init_size);
+	for (size_t i = 0; i < init_size; i++) {
+		ASSERT_TRUE(vec[i] == init_value);
+	}
+}
 
 TEST(Vector, Insert)
 {
@@ -25,6 +48,18 @@ TEST(Vector, Capacity)
 	ASSERT_TRUE(is_capacity_ok);
 }
 
+
+TEST(Vector, Push_back)
+{
+	const size_t init_capacity = 5;
+	ava::Vector<int> vec(init_capacity);
+	for (size_t i = 0; i < init_capacity + 1; i++) {
+		vec.push_back(i);
+		ASSERT_TRUE(vec[i] == i);
+	}
+	ASSERT_TRUE(vec.capacity() > init_capacity);
+}
+
 class Vector_Object_For_Testing_Single_Vec : public testing::Test
 {
 public:
@@ -39,6 +74,26 @@ protected:
 	const size_t init_size_ = 10;
 	ava::Vector<double> vec_;
 };
+
+TEST_F(Vector_Object_For_Testing_Single_Vec, Copy_constructor)
+{
+	ava::Vector<double> copy_vec(vec_);
+	ASSERT_TRUE(vec_.size() == copy_vec.size());
+	ASSERT_TRUE(vec_.capacity() == copy_vec.capacity());
+	for (size_t i = 0; i < init_size_; i++) {
+		ASSERT_TRUE(vec_[i] == copy_vec[i]);
+		ASSERT_TRUE(&vec_[i] != &copy_vec[i]);
+	}
+}
+
+TEST_F(Vector_Object_For_Testing_Single_Vec, Pop_back)
+{
+	for (size_t size = init_size_; size > 0; size--) {
+		vec_.pop_back();
+		ASSERT_TRUE(vec_.size() == size - 1);
+	}
+	ASSERT_THROW(vec_.pop_back(), std::length_error);
+}
 
 TEST_F(Vector_Object_For_Testing_Single_Vec, Resize_With_Reduction)
 {

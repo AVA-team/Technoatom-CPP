@@ -4,7 +4,7 @@
 #include<algorithm>
 
 template <class T>
-Vector<T>::Vector(std::size_t capacity):
+Vector<T>::Vector(std::size_t capacity = standart_init_capacity):
   size_(0),
   CAPACITY_INCREMENT(10U),
   capacity_(capacity),
