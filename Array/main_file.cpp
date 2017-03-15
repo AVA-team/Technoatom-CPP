@@ -1,6 +1,7 @@
 #include <iostream>
 #include"gtest\gtest.h"
 #include "Array.h"
+#include"Vector.h"
 
 TEST(Vector, Insert)
 {
@@ -87,7 +88,7 @@ TEST_F(Vector_Object_For_Resizing_And_Assigning, Assign_With_Count_Less_Than_Cap
 	vec_.assign(3, 0);
 
 	size_t size = vec_.size(), capacity = vec_.capacity();
-	bool is_size_ok = (size == 10);
+	bool is_size_ok = (size == 3);
 
 	ASSERT_TRUE(is_size_ok);
 
@@ -95,8 +96,8 @@ TEST_F(Vector_Object_For_Resizing_And_Assigning, Assign_With_Count_Less_Than_Cap
 
 	ASSERT_TRUE(is_capacity_ok);
 
-	double el_num1 = vec_[0], el_num2 = vec_[1], el_num3 = vec_[2], el_num4 = vec_[3], el_num5 = vec_[4];
-	bool are_elements_ok = (el_num1 == 0) && (el_num2 == 0) && (el_num3 == 0) && (el_num4 == 4) && (el_num5 == 5);
+	double el_num1 = vec_[0], el_num2 = vec_[1], el_num3 = vec_[2];
+	bool are_elements_ok = (el_num1 == 0) && (el_num2 == 0) && (el_num3 == 0);
 
 	ASSERT_TRUE(are_elements_ok);
 }
@@ -188,6 +189,19 @@ TEST_F(Vector_Objects_For_Cheking_Equality, Check_Elements_Equality)
 		&& (first_assigned_el_num2 == init_el_num2) && (second_assigned_el_num2 == init_el_num2)
 		&& (first_assigned_el_num3 == init_el_num3) && (second_assigned_el_num3 == init_el_num3);
 
+	ASSERT_TRUE(is_ok);
+}
+
+TEST(Vector, Iterator)
+{
+	ava::Vector<int> v(5);
+	v.insert(0, 3, 5);
+	int i = 0;
+	for (ava::Vector_Iterator<int> it = v.begin(); it != v.end(); ++it, ++i) {
+		*it = (i + 1) * (i + 1);
+	}
+	int val_num1 = v[0], val_num2 = v[1], val_num3 = v[2];
+	bool is_ok = (val_num1 == 1) && (val_num2 == 4) && (val_num3 == 9);
 	ASSERT_TRUE(is_ok);
 }
 

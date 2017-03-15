@@ -8,6 +8,24 @@ namespace ava {
 	template <class T, class ContainerType>
 	class ArrayInterface {
 	public:
+
+		class Array_Iterator {
+		public:
+			Array_Iterator(T* val_p);
+			~Array_Iterator();
+			T& operator*();
+			Array_Iterator& operator++();
+			Array_Iterator& operator--();
+			Array_Iterator operator++(int);//postfix
+			Array_Iterator operator--(int);//postfix
+			bool operator==(const Array_Iterator& other);
+			bool operator!=(const Array_Iterator& other);
+
+
+		private:
+			T* val_p_;
+		};
+
 		//! Constructor for operate with Static Array and Dynamic Vector with same Interface
 		ArrayInterface(ContainerType & container);
 
@@ -75,9 +93,10 @@ namespace ava {
 		ArrayInterface(const ArrayInterface & that);
 		const ArrayInterface & operator=(const ArrayInterface & that);
 	};
-
+	
 #include "Array_interface_realization.h"
+	}
 
-}
+
 
 #endif //ARRAY_INTERFACE_H_

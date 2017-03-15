@@ -68,6 +68,53 @@ void ArrayInterface<T, ContainerType>::dump() const {
 	std::cout << std::endl;
 }
 
+template <class T, class ContainerType>
+ArrayInterface<T, ContainerType>::Array_Iterator::Array_Iterator(T* val_p) {
+	val_p_ = val_p;
+}
+
+template <class T, class ContainerType>
+ArrayInterface<T, ContainerType>::Array_Iterator::~Array_Iterator() {}
+
+template <class T, class ContainerType>
+T& ArrayInterface<T, ContainerType>::Array_Iterator::operator*() {
+	return *val_p_;
+}
+
+template <class T, class ContainerType>
+typename ArrayInterface<T, ContainerType>::Array_Iterator& ArrayInterface<T, ContainerType>::Array_Iterator::operator++() {
+	++val_p_;
+	return *this;
+}
+
+template <class T, class ContainerType>
+typename ArrayInterface<T, ContainerType>::Array_Iterator& ArrayInterface<T, ContainerType>::Array_Iterator::operator--() {
+	--val_p_;
+	return *this;
+}
+
+template <class T, class ContainerType>
+typename ArrayInterface<T, ContainerType>::Array_Iterator ArrayInterface<T, ContainerType>::Array_Iterator::operator++(int) {
+	return ArrayInterface<T, ContainerType>::Array_Iterator(++val_p_);
+}
+
+
+template <class T, class ContainerType>
+typename ArrayInterface<T, ContainerType>::Array_Iterator ArrayInterface<T, ContainerType>::Array_Iterator::operator--(int) {
+	return ArrayInterface<T, ContainerType>::Array_Iterator(--val_p_);
+}
+
+template <class T, class ContainerType>
+bool ArrayInterface<T, ContainerType>::Array_Iterator::operator==(const typename ArrayInterface<T, ContainerType>::Array_Iterator& other) {
+	return *val_p_ == *(other.val_p_);
+}
+
+template <class T, class ContainerType>
+bool ArrayInterface<T, ContainerType>::Array_Iterator::operator!=(const typename ArrayInterface<T, ContainerType>::Array_Iterator& other) {
+	return !(*val_p_ == *(other.val_p_));
+}
+
+
 #undef size_
 #undef data_
 ;
