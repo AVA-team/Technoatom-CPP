@@ -4,34 +4,27 @@
 #include<algorithm>
 
 template <class T>
-Vector<T>::Vector(std::size_t capacity = standart_init_capacity):
-  size_(0),
-  CAPACITY_INCREMENT(10U),
-  capacity_(capacity),
-  data_(new T[capacity_]),
-  ArrayInterface(*this){ }
+Vector<T>::Vector(std::size_t capacity = standart_init_capacity) :
+	ContainerInterface(new T[capacity], 0),
+	CAPACITY_INCREMENT(10U),
+	capacity_(capacity) { }
 
 
 template <class T>
 Vector<T>::Vector(const Vector & that) :
-	size_(that.size_),
+	ContainerInterface(new T[that.capacity_], that.size_),
 	CAPACITY_INCREMENT(10U),
-	capacity_(that.capacity_),
-	data_(new T[that.capacity_]),
-	ArrayInterface(*this) {
-
+	capacity_(that.capacity_) {
 	std::copy(that.data_, that.data_ + size_, data_);
 }
 
 
 template<class T>
 Vector<T>::Vector(std::size_t size, const T& value) :
-	size_(size),
+	ContainerInterface(nullptr, size),
 	CAPACITY_INCREMENT(10U),
-	capacity_(size_ + CAPACITY_INCREMENT),
-	data_(new T[capacity_]),
-	ArrayInterface(*this) {
-
+	capacity_(size_ + CAPACITY_INCREMENT) {
+	data_ = new T[capacity_];
 	for (size_t i = 0; i < size_; i++)
 	{
 		data_[i] = value;
@@ -52,7 +45,6 @@ void Vector<T>::push_back(T value_to_copy) {
 
 template<class T>
 void Vector<T>::insert(std::size_t pos, std::size_t elements_count, const T& value_to_copy) {
-
 	if (pos > size_) throw std::out_of_range("Failed attempt to invoke method Vector<T>::insert()\nIndex (pos) bigger than current size\n");
 
 	const std::size_t new_size = (size_ + elements_count);
