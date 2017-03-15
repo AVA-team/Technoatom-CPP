@@ -2,7 +2,6 @@
 #define VECTOR_H_
 
 #include "Array_interface.h"
-#include "Vector_Iterator.h"
 
 namespace ava {
 	//! Initial capacity of vector, if constuct it with default constuctor.
@@ -102,12 +101,6 @@ namespace ava {
 			size_ = 0;
 		}
 
-		//! Return vector iterator that points to the first elements
-		Vector_Iterator<T> begin() const { return Vector_Iterator<T>(data_); }
-
-		//! Return vector iterator that points to the end
-		Vector_Iterator<T> end() const { return Vector_Iterator<T>(data_ + size_); }
-		
 	private:
 		//! Size of dynamic array.
 		std::size_t size_;

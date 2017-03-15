@@ -9,11 +9,15 @@ namespace ava {
 	class ArrayInterface {
 	public:
 
-		class Array_Iterator {
+		//! Forward iterator for work with static and dinamic arrays.
+		class Array_Iterator
+			: public std::iterator<std::forward_iterator_tag, T>
+		{
 		public:
 			Array_Iterator(T* val_p);
 			~Array_Iterator();
 			T& operator*();
+			T* operator->();
 			Array_Iterator& operator++();
 			Array_Iterator& operator--();
 			Array_Iterator operator++(int);//postfix
@@ -84,6 +88,12 @@ namespace ava {
 		//! Present array in console.
 		virtual void dump() const;
 
+		//! Return iterator that points to the first element
+		virtual Array_Iterator begin();
+
+		//! Return iterator that points to the end element
+		virtual Array_Iterator end();
+
 	protected:
 		//! Out of range exception text.
 		static const std::string OUT_OF_RANGE_EXC_TEXT;
@@ -95,7 +105,7 @@ namespace ava {
 	};
 	
 #include "Array_interface_realization.h"
-	}
+}
 
 
 

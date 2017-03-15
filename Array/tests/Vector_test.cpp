@@ -302,7 +302,6 @@ TEST_F(Vector_Objects_For_Cheking_Equality, Check_Elements_Addreses_Not_Equality
 }
 
 int main(int argc, char** argv) {
-
 	testing::InitGoogleTest(&argc, argv);
 	RUN_ALL_TESTS();
 	getchar();

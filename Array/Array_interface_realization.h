@@ -69,6 +69,16 @@ void ArrayInterface<T, ContainerType>::dump() const {
 }
 
 template <class T, class ContainerType>
+typename ArrayInterface<T, ContainerType>::Array_Iterator ArrayInterface<T, ContainerType>::begin() {
+	return Array_Iterator(data_);
+}
+
+template <class T, class ContainerType>
+typename ArrayInterface<T, ContainerType>::Array_Iterator ArrayInterface<T, ContainerType>::end() {
+	return Array_Iterator(data_ + size_);
+}
+
+template <class T, class ContainerType>
 ArrayInterface<T, ContainerType>::Array_Iterator::Array_Iterator(T* val_p) {
 	val_p_ = val_p;
 }
@@ -79,6 +89,11 @@ ArrayInterface<T, ContainerType>::Array_Iterator::~Array_Iterator() {}
 template <class T, class ContainerType>
 T& ArrayInterface<T, ContainerType>::Array_Iterator::operator*() {
 	return *val_p_;
+}
+
+template <class T, class ContainerType>
+T* ArrayInterface<T, ContainerType>::Array_Iterator::operator->() {
+	return val_p_;
 }
 
 template <class T, class ContainerType>

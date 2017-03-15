@@ -61,7 +61,7 @@ void Vector<T>::insert(std::size_t pos, std::size_t elements_count, const T& val
 	if (new_size > capacity_) {
 		capacity_ = new_size + CAPACITY_INCREMENT;
 		auto new_data = new T[capacity_];
-		std::copy(data_, data_ + pos, new_data);
+		std::copy(begin(), end(), new_data);
 		delete[] data_;
 		data_ = new_data;
 	}
@@ -94,7 +94,7 @@ void Vector<T>::reserve(std::size_t new_capacity) {
 	else {
 		capacity_ = new_capacity;
 		auto new_data = new T[capacity_];
-		std::copy(data_, data_ + size_, new_data);
+		std::copy(begin(), end(), new_data);
 		delete[] data_;
 		data_ = new_data;
 	}
@@ -105,7 +105,7 @@ template<class T>
 void Vector<T>::shrink_to_fit() {
 	capacity_ = size_;
 	auto new_data = new T[capacity_];
-	std::copy(data_, data_ + size_, new_data);
+	std::copy(begin(), end(), new_data);
 	delete[] data_;
 	data_ = new_data;
 }
