@@ -1,11 +1,11 @@
 #include <iostream>
-#include"gtest\gtest.h"
-#include "..\Vector.h"
+#include "gtest\gtest.h"
+#include "..\vector.h"
 
 TEST(Vector, Constructor_with_capacity)
 {
 	ava::Vector<int> vec_with_default_capacity;
-	ASSERT_TRUE(vec_with_default_capacity.capacity() == ava::standart_init_capacity);
+	ASSERT_TRUE(vec_with_default_capacity.capacity() == ava::default_capacity);
 	ASSERT_TRUE(vec_with_default_capacity.size() == 0);
 
 	const size_t init_capacity = 10;

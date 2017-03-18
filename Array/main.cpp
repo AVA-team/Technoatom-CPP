@@ -1,7 +1,7 @@
 #include <iostream>
-#include"gtest\gtest.h"
+#include "gtest\gtest.h"
 #include "Array.h"
-#include"Vector.h"
+#include "Vector.h"
 
 TEST(Vector, Insert)
 {
@@ -197,7 +197,7 @@ TEST(Vector, Iterator)
 	ava::Vector<int> v(5);
 	v.insert(0, 3, 5);
 	int i = 0;
-	for (ava::Vector_Iterator<int> it = v.begin(); it != v.end(); ++it, ++i) {
+	for (auto it = v.begin(); it != v.end(); ++it, ++i) {
 		*it = (i + 1) * (i + 1);
 	}
 	int val_num1 = v[0], val_num2 = v[1], val_num3 = v[2];
@@ -206,38 +206,6 @@ TEST(Vector, Iterator)
 }
 
 int main(int argc, char** argv){
-	//ava::Vector<int> v1(10);
-
-	//v1.fill(3);
-	//ava::Vector<int> v2(5);
-	//v2.fill(6);
-
-	//v1.swap(v2);
-
-	////v2 = v1;
-
-	//v1.dump();
-	//v2.dump();
-
-	////////////
-	//ava::Array<int, 6> a1, a2;
-	//a1.fill(1);
-	//a2.fill(2);
-
-	//a1.swap(a2);
-
-	////a2 = a1;
-
-	//a1.dump();
-	//a2.dump();
-	//try{
-	//	a1.at(10);
-	//}
-	//catch(std::exception & ex){
-	//	std::cout << ex.what() << std::endl;
-	//}
-
-	//system("PAUSE");
 	testing::InitGoogleTest(&argc, argv);
 	RUN_ALL_TESTS();
 	getchar();

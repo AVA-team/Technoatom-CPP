@@ -1,5 +1,5 @@
-#ifndef ARRAY_INTERFACE_REALIZATION_H_
-#define ARRAY_INTERFACE_REALIZATION_H_
+#ifndef CONTAINER_INTERFACE_HPP_
+#define CONTAINER_INTERFACE_HPP_
 
 template <class T>
 const std::string  ContainerInterface<T>::OUT_OF_RANGE_EXC_TEXT = "Pos is out of range of array size!";
@@ -67,65 +67,65 @@ void ContainerInterface<T>::dump() const {
 }
 
 template <class T>
-typename ContainerInterface<T>::Array_Iterator ContainerInterface<T>::begin() {
-	return Array_Iterator(data_);
+typename ContainerInterface<T>::ArrayIterator ContainerInterface<T>::begin() {
+	return ArrayIterator(data_);
 }
 
 template <class T>
-typename ContainerInterface<T>::Array_Iterator ContainerInterface<T>::end() {
-	return Array_Iterator(data_ + size_);
+typename ContainerInterface<T>::ArrayIterator ContainerInterface<T>::end() {
+	return ArrayIterator(data_ + size_);
 }
 
 template <class T>
-ContainerInterface<T>::Array_Iterator::Array_Iterator(T* val_p) {
+ContainerInterface<T>::ArrayIterator::ArrayIterator(T* val_p) {
 	val_p_ = val_p;
 }
 
 template <class T>
-ContainerInterface<T>::Array_Iterator::~Array_Iterator() {}
+ContainerInterface<T>::ArrayIterator::~ArrayIterator() {}
 
 template <class T>
-T& ContainerInterface<T>::Array_Iterator::operator*() {
+T& ContainerInterface<T>::ArrayIterator::operator*() {
 	return *val_p_;
 }
 
 template <class T>
-T* ContainerInterface<T>::Array_Iterator::operator->() {
+T* ContainerInterface<T>::ArrayIterator::operator->() {
 	return val_p_;
 }
 
 template <class T>
-typename ContainerInterface<T>::Array_Iterator& ContainerInterface<T>::Array_Iterator::operator++() {
+typename ContainerInterface<T>::ArrayIterator& ContainerInterface<T>::ArrayIterator::operator++() {
 	++val_p_;
 	return *this;
 }
 
 template <class T>
-typename ContainerInterface<T>::Array_Iterator& ContainerInterface<T>::Array_Iterator::operator--() {
+typename ContainerInterface<T>::ArrayIterator& ContainerInterface<T>::ArrayIterator::operator--() {
 	--val_p_;
 	return *this;
 }
 
 template <class T>
-typename ContainerInterface<T>::Array_Iterator ContainerInterface<T>::Array_Iterator::operator++(int) {
-	return ContainerInterface<T>::Array_Iterator(++val_p_);
+typename ContainerInterface<T>::ArrayIterator ContainerInterface<T>::ArrayIterator::operator++(int) {
+	return ContainerInterface<T>::ArrayIterator(++val_p_);
 }
 
 
 template <class T>
-typename ContainerInterface<T>::Array_Iterator ContainerInterface<T>::Array_Iterator::operator--(int) {
-	return ContainerInterface<T>::Array_Iterator(--val_p_);
+typename ContainerInterface<T>::ArrayIterator ContainerInterface<T>::ArrayIterator::operator--(int) {
+	return ContainerInterface<T>::ArrayIterator(--val_p_);
 }
 
 template <class T>
-bool ContainerInterface<T>::Array_Iterator::operator==(const typename ContainerInterface<T>::Array_Iterator& other) {
+bool ContainerInterface<T>::ArrayIterator::operator==(const typename ContainerInterface<T>::ArrayIterator& other) {
 	return *val_p_ == *(other.val_p_);
 }
 
 template <class T>
-bool ContainerInterface<T>::Array_Iterator::operator!=(const typename ContainerInterface<T>::Array_Iterator& other) {
+bool ContainerInterface<T>::ArrayIterator::operator!=(const typename ContainerInterface<T>::ArrayIterator& other) {
 	return !(*val_p_ == *(other.val_p_));
 }
 
 ;
-#endif
+#endif // CONTAINER_INTERFACE_HPP_

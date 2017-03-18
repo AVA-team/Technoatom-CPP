@@ -1,7 +1,7 @@
 #ifndef ARRAY_H_
 #define ARRAY_H_
 
-#include "Container_interface.h"
+#include "container_interface.h"
 
 namespace ava {
 	//! Array with elements in static memory.
@@ -21,6 +21,6 @@ namespace ava {
 		//! Data array.
 		T static_data_[N];
 	};
-#include "implementation\Array_implementation.h"
+#include "implementation\array.hpp"
 }
 #endif // ARRAY_H_

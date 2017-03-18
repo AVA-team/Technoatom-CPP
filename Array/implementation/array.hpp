@@ -1,5 +1,5 @@
-#ifndef ARRAY_STATIC_REALIZATION_H_
-#define ARRAY_STATIC_REALIZATION_H_
+#ifndef ARRAY_HPP_
+#define ARRAY_HPP_
 
 template <class T, std::size_t N>
 Array<T, N>::Array() :
@@ -33,4 +33,4 @@ void Array<T, N>::swap(Array & that) {
 }
 
 ;
-#endif
+#endif // ARRAY_HPP_

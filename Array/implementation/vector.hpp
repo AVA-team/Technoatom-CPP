@@ -1,10 +1,11 @@
-#ifndef VECTOR_REALIZATION_H_
-#define VECTOR_REALIZATION_H_
-#include<exception>
-#include<algorithm>
+#ifndef VECTOR_HPP_
+#define VECTOR_HPP_
+
+#include <exception>
+#include <algorithm>
 
 template <class T>
-Vector<T>::Vector(std::size_t capacity = standart_init_capacity) :
+Vector<T>::Vector(std::size_t capacity = default_capacity) :
 	ContainerInterface(new T[capacity], 0),
 	CAPACITY_INCREMENT(10U),
 	capacity_(capacity) { }
@@ -119,4 +120,4 @@ void Vector<T>::assign(std::size_t count, const T& value_to_copy) {
 
 
 ;
-#endif // VECTOR_REALIZATION_H_
+#endif // VECTOR_HPP_
