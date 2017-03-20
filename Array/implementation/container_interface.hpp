@@ -108,13 +108,17 @@ typename ContainerInterface<T>::ArrayIterator& ContainerInterface<T>::ArrayItera
 
 template <class T>
 typename ContainerInterface<T>::ArrayIterator ContainerInterface<T>::ArrayIterator::operator++(int) {
-	return ContainerInterface<T>::ArrayIterator(++val_p_);
+	ContainerInterface<T>::ArrayIterator to_return(*this);
+	++(*this);
+	return to_return;
 }
 
 
 template <class T>
 typename ContainerInterface<T>::ArrayIterator ContainerInterface<T>::ArrayIterator::operator--(int) {
-	return ContainerInterface<T>::ArrayIterator(--val_p_);
+	ContainerInterface<T>::ArrayIterator to_return(*this);
+	--(*this);
+	return to_return;
 }
 
 template <class T>

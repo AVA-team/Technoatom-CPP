@@ -4,30 +4,53 @@
 #include <exception>
 #include <algorithm>
 
+const std::size_t CAPACITY_INCREMENT_VALUE = 10U;
+
 template <class T>
 Vector<T>::Vector(std::size_t capacity = default_capacity) :
 	ContainerInterface(new T[capacity], 0),
-	CAPACITY_INCREMENT(10U),
+	CAPACITY_INCREMENT(CAPACITY_INCREMENT_VALUE),
 	capacity_(capacity) { }
 
 
 template <class T>
 Vector<T>::Vector(const Vector & that) :
 	ContainerInterface(new T[that.capacity_], that.size_),
-	CAPACITY_INCREMENT(10U),
+	CAPACITY_INCREMENT(CAPACITY_INCREMENT_VALUE),
 	capacity_(that.capacity_) {
 	std::copy(that.data_, that.data_ + size_, data_);
 }
 
 
 template<class T>
+Vector<T>::Vector(const std::initializer_list<T>& init) :
+	ContainerInterface(new T[init.size()], init.size()),
+	CAPACITY_INCREMENT(CAPACITY_INCREMENT_VALUE),
+	capacity_(size_) {
+	int i = 0;
+	for (auto it = init.begin(); it != init.end(); ++it, ++i) {
+		data_[i] = *it;
+	}
+}
+
+
+template<class T>
+Vector<T>::Vector(Vector&& that) :
+	ContainerInterface(nullptr, 0),
+	CAPACITY_INCREMENT(CAPACITY_INCREMENT_VALUE),
+	capacity_(0) {
+	swap(that);
+}
+
+
+
+template<class T>
 Vector<T>::Vector(std::size_t size, const T& value) :
 	ContainerInterface(nullptr, size),
-	CAPACITY_INCREMENT(10U),
+	CAPACITY_INCREMENT(CAPACITY_INCREMENT_VALUE),
 	capacity_(size_ + CAPACITY_INCREMENT) {
 	data_ = new T[capacity_];
-	for (size_t i = 0; i < size_; i++)
-	{
+	for (size_t i = 0; i < size_; i++) {
 		data_[i] = value;
 	}
 }

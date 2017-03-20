@@ -9,7 +9,7 @@ namespace ava {
 	class Array : public ContainerInterface<T> {
 	public:
 		Array() ;
-		Array(const Array & that) ;
+		Array(const Array & that);
 		~Array();
 		const Array & operator=(const Array & that);
 		//! Exchanges the contents of the array with those of other.

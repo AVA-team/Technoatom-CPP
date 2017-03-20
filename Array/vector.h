@@ -13,6 +13,10 @@ namespace ava {
 	public:
 		explicit Vector(const std::size_t capacity = default_capacity);
 		explicit Vector(const Vector & that);
+		//! Constractor for initializer list in oder to use expressions like this: Vector v = {1, 2, 3}
+		Vector(const std::initializer_list<T>& init);
+		//! Move constructor
+		Vector(Vector&& that);
 		//! Fill constructor constucts a container with n elements.
 		//! Each element is a copy of value
 		//! 

@@ -14,8 +14,10 @@ Array<T, N>::Array(const Array & that) :
 	}
 }
 
+
 template <class T, std::size_t N>
 Array<T, N>::~Array() { for (auto& i : static_data_) i = 0; }
+
 
 template <class T, std::size_t N>
 const Array<T, N> & Array<T, N>::operator=(const Array & that) {
