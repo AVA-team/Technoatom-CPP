@@ -9,6 +9,8 @@
 //!
 //! Класс стека на основе массива хранит в себе информацию: о количестве элементов в стеке; указатель на динамический массив, в котором хранятся элементы стека; текущий размер динамического массива.
 //!@author Корнилов Антон, 2017
+//!@author Анам Ахмед, 2017
+//!@author Тюняков, 2017
 //!@date 24.02.2017
 
 #ifndef STK_LINKED_LIST_H
@@ -32,8 +34,8 @@
 		throw std::length_error("Error: Try to work with empty stack in: " FUNKNAME); \
 	}	
 
-//! \namespace stk В данном пространстве имён представлены описания и реализации классов стеков на основе связанного списка и на основе массива.
-namespace stk{
+//! \namespace ava В данном пространстве имён представлены описания и реализации классов стеков на основе связанного списка и на основе массива.
+namespace ava{
 	
 	//!Класс, представляющий интерфейс для классов стеков.
 	template <class T>
@@ -125,37 +127,40 @@ namespace stk{
 	};
 
 	//!Класс стека, реализованный на основе динамического массива.
-	template <class T>
-	class StackAsMass: public Stack_Interface<T>{
+	template <class T, template<class> ContainerType>
+	class Stack: public Stack_Interface<T>{
 	public:
 		/*! Конструктор стека на основе массива по умолчанию.
 		*/
-		StackAsMass();
+		Stack();
 
 		/*! Конструктор стека на основе массива с заданием начального размера динамического массива.
 		\param[in] capacity Начальный размер динамического массива.
 		*/
-		explicit StackAsMass(size_t capacity);
+		explicit Stack(size_t capacity);
 
 		/*!Метод обмена содержимым стеков на основе массива.
 		\param[in] other_stack Стек, информацией с которым необходимо поменяться.
 		*/
-		void swap(StackAsMass & other_stack);
+		void swap(Stack & other_stack);
 
 		/*! Конструктор копирования стека на основе массива.
 		\param[in] other_stack Стек, всю информацию из которого необходимо перенести в создаваемый.
 		*/
-		StackAsMass(const StackAsMass & other_stack);
+		Stack(const Stack & other_stack);
+
+		//! Инициализация стэка контейнером
+		Stack(const ContainerType<T>& container);
 
 		/*! Операция присваивания стека на основе массива.
 		\param[in] other_stack Стек, всю информацию из которого необходимо перенести в текущий.
 		\return Ссылку на текущий стек с перенесённой информацией.
 		*/
-		StackAsMass & operator=(StackAsMass other_stack);
+		Stack & operator=(Stack other_stack);
 
 		/*! Деструктор стека на основе массива.
 		*/
-		~StackAsMass();
+		~Stack();
 		void dump() const;
 		bool empty() const;
 		size_t size() const;
@@ -163,13 +168,13 @@ namespace stk{
 		void pop();
 		T& top();
 	private:
-		size_t capacity_;		//!<Размер массива, в котором хранятся данные стека.
-		size_t num_items_;		//!<Количество хранимых элементов в стеке.
-		T * data_;				//!<Указатель на массив хранящий данные стека в динамической памяти.
+		//size_t capacity_;		//!<Размер массива, в котором хранятся данные стека.
+		//size_t num_items_;		//!<Количество хранимых элементов в стеке.
+		ContainerType<T> container_;				//!<Указатель на массив хранящий данные стека в динамической памяти.
 	};
 
-#include "stk_as_list_realization.h"
-#include "stk_as_mass_realization.h"
+#include "stk_as_list_implementation.h"
+#include "stk_as_array_implementation.h"
 
 }
 

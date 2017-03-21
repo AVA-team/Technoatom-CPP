@@ -302,15 +302,15 @@ int main(){
 
 	/*! Проведение тестов для стеков на основе списка и на основе массивов:
 	    TestPush, TestPop, TestTop, TestCopyConstructor, TestAssignmentOperator, TestEmpty, TestSize , TestSwap.*/
-	void (* tests[])() = {stk_test::TestPush<stk::StackAsList>, stk_test::TestPop<stk::StackAsList>,	\
-		stk_test::TestTop<stk::StackAsList>, stk_test::TestCopyConstructor<stk::StackAsList>, 			\
-		stk_test::TestAssignmentOperator<stk::StackAsList>, stk_test::TestEmpty<stk::StackAsList>,		\
-		stk_test::TestSize<stk::StackAsList>, stk_test::TestSwap<stk::StackAsList>,						\
+	void (* tests[])() = {stk_test::TestPush<ava::StackAsList>, stk_test::TestPop<ava::StackAsList>,	\
+		stk_test::TestTop<ava::StackAsList>, stk_test::TestCopyConstructor<ava::StackAsList>, 			\
+		stk_test::TestAssignmentOperator<ava::StackAsList>, stk_test::TestEmpty<ava::StackAsList>,		\
+		stk_test::TestSize<ava::StackAsList>, stk_test::TestSwap<ava::StackAsList>,						\
 																										\
-		stk_test::TestPush<stk::StackAsMass>, stk_test::TestPop<stk::StackAsMass>,						\
-		stk_test::TestTop<stk::StackAsMass>, stk_test::TestCopyConstructor<stk::StackAsMass>, 			\
-		stk_test::TestAssignmentOperator<stk::StackAsMass>, stk_test::TestEmpty<stk::StackAsMass>,		\
-		stk_test::TestSize<stk::StackAsMass>, stk_test::TestSwap<stk::StackAsMass>,						\
+		stk_test::TestPush<ava::Stack>, stk_test::TestPop<ava::Stack>,						\
+		stk_test::TestTop<ava::Stack>, stk_test::TestCopyConstructor<ava::Stack>, 			\
+		stk_test::TestAssignmentOperator<ava::Stack>, stk_test::TestEmpty<ava::Stack>,		\
+		stk_test::TestSize<ava::Stack>, stk_test::TestSwap<ava::Stack>,						\
 	};
 
 	for(auto test: tests){
