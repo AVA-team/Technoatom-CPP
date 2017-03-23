@@ -1,7 +1,7 @@
-#ifndef CONTAINER_INTERFACE_H_
-#define CONTAINER_INTERFACE_H_
+#pragma once
 
 #include <string>
+#include <exception>
 
 namespace ava {
 	template <class T>
@@ -28,7 +28,7 @@ namespace ava {
 		//! Constructor for operate with Static Array and Dynamic Vector with same Interface
 		ContainerInterface(T * data, std::size_t size);
 
-		//! Returns a reference to the element at specified location pos. No bounds checking is performed.
+		//! Returns a L-value reference to the element at specified location pos.
 		//!
 		//! @param pos is position of the element to return
 		//! @return reference of the element to return
@@ -73,7 +73,7 @@ namespace ava {
 		//! Returns the number of elements in the array.
 		//!
 		//! @return the number of elements in the array
-		virtual std::size_t size() const;
+		virtual size_t size() const;
 
 		//! Assigns the given value value to all elements in the array.
 		//!
@@ -84,21 +84,18 @@ namespace ava {
 		virtual void dump() const;
 
 		//! Returns iterator that points to the first element
-		virtual ArrayIterator begin();
+		virtual typename ArrayIterator begin();
 
 		//! Returns iterator that points to the end element
-		virtual ArrayIterator end();
+		virtual typename ArrayIterator end();
 	protected:
 		//! Out of range exception text.
 		static const std::string OUT_OF_RANGE_EXC_TEXT;
 		T * data_;
-		std::size_t size_;
+		size_t size_;
 	private:
 		ContainerInterface();
 		ContainerInterface(const ContainerInterface & that);
 		const ContainerInterface & operator=(const ContainerInterface & that);
 	};
-#include "implementation\container_interface.hpp"
 }
-
-#endif //CONTAINER_INTERFACE_H_

@@ -1,18 +1,20 @@
-#ifndef VECTOR_H_
-#define VECTOR_H_
+#pragma once
 
-#include "container_interface.h"
+#include <exception>
+#include <algorithm>
+#include<iostream>
+#include "implementation/container_interface.hpp"
 
 namespace ava {
 	//! Initial vector capacity for default constuctor.
-	const std::size_t default_capacity = 10;
+	const size_t default_capacity = 10;
 
 	//! Array with elements in dynamic memory.
 	template <class T>
 	class Vector : public ContainerInterface<T> {
 	public:
 		explicit Vector(const std::size_t capacity = default_capacity);
-		explicit Vector(const Vector & that);
+		explicit Vector(const Vector& that);
 		//! Constractor for initializer list in oder to use expressions like this: Vector v = {1, 2, 3}
 		Vector(const std::initializer_list<T>& init);
 		//! Move constructor
@@ -22,25 +24,35 @@ namespace ava {
 		//! 
 		//! @param value is a value that equals to each element in the created container
 		explicit Vector(std::size_t size, const T& value);
-		~Vector() {
-			clear();
-		}
 
-		const Vector & operator=(const Vector & that) {
-			Vector<T> tmp_vector(that);
-			swap(tmp_vector);
-			return *this;
-		}
+		~Vector();
+
+		//! Overloaded assignment operator
+		const Vector& operator=(const Vector& that);
+
+		//! Overloaded move assignment operator
+		Vector& operator=(Vector&& that);
+
+		//! Overloaded operator returns L-value of an element at pos
+		//
+		// @param pos is the position of returning element
+		T& operator[](const std::size_t pos);
+
+		//! Overloaded equality operator
+		//!
+		//! @param that is a vector wich is compared to
+		bool operator ==(const Vector& that);
+
+		//! Overloaded non-equality operator
+		//!
+		//! @param that is a vector wich is compared to
+		bool operator !=(const Vector& that);
 
 		//! Exchanges the contents of the array with those of other.
 		//! Does not cause references to associate with the other array.
 		//!
 		//! @param that is array to exchange the contents with
-		void swap(Vector & that) {
-			std::swap(capacity_, that.capacity_);
-			std::swap(size_, that.size_);
-			std::swap(data_, that.data_);
-		}
+		void swap(Vector & that);
 
 		//! Adds a new element at the end of the vector, after its current last element.
 		//! The content of val is copied (or moved) to the new element.
@@ -53,12 +65,7 @@ namespace ava {
 		//! Delete last element.
 		//! Removes the last element in the vector, effectively reducing the container size by one.
 		//! This destroys the removed element.
-		void pop_back() {
-			if (size_ == 0) {
-				throw std::length_error("Attempt to pop from empty vector!");
-			}
-			--size_;
-		}
+		void pop_back();
 
 		//! The vector is extended by inserting new elements before the element at the specified position, effectively increasing the container size by the number of elements inserted.
 		void insert(std::size_t pos, std::size_t elements_count, const T& value_to_copy);
@@ -94,16 +101,12 @@ namespace ava {
 		void assign(std::size_t count, const T& value_to_Copy);
 
 		//! Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
-		void clear() {
-			delete[] data_;
-			data_ = nullptr;
-			size_ = 0;
-		}
+		void clear();
+
 	private:
+		std::size_t get_proper_new_capacity(std::size_t new_size);
+
 		const std::size_t CAPACITY_INCREMENT;
 		std::size_t capacity_;
 	};
-#include "implementation\vector.hpp"
 }
-
-#endif // VECTOR_H_
