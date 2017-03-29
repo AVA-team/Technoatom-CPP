@@ -4,9 +4,6 @@
 namespace ava {
 	template<class T>
 	class auto_ptr {
-	private:
-		//! A pointer to the element pointed by the auto_ptr object.
-		T * ptr_;
 	public:
 		//! Constructs an auto_ptr object either from a pointer.
 		//!
@@ -48,6 +45,9 @@ namespace ava {
 		//!
 		//! @param p Pointer to element. Its value is set as the new internal pointer's value for the auto_ptr object.
 		void reset(T * p = nullptr);
+	private:
+		//! A pointer to the element pointed by the auto_ptr object.
+		T * ptr_;
 	};
 }
 
