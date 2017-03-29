@@ -5,6 +5,7 @@ namespace ava {
 	template<class T>
 	class auto_ptr {
 	private:
+		//! A pointer to the element pointed by the auto_ptr object.
 		T * ptr_;
 	public:
 		//! Constructs an auto_ptr object either from a pointer.
