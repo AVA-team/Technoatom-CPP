@@ -4,7 +4,7 @@
 namespace ava {
 	template<class T>
 	shared_ptr<T>::shared_ptr(T* p = nullptr) :
-		proxy_ptr_(new typename shared_ptr<T>::Proxy(p)) {}
+		proxy_ptr_(new shared_ptr<T>::Proxy(p)) {}
 
 	template<class T>
 	shared_ptr<T>::shared_ptr(const shared_ptr<T>& that) {
@@ -17,43 +17,43 @@ namespace ava {
 		proxy_ptr_->decrement_count();
 		if (proxy_ptr_->get_count() == 0) {
 			delete proxy_ptr_;
-			delete this;
+			proxy_ptr_ = nullptr;
 		}
 	}
 
 	template<class T>
-	typename shared_ptr<T>::Proxy::Proxy(T* p = nullptr) {
+	shared_ptr<T>::Proxy::Proxy(T* p = nullptr) {
 		count_ = 1L;
 		ptr_ = p;
 	}
 
 	template<class T>
-	typename shared_ptr<T>::Proxy::~Proxy() {
+	shared_ptr<T>::Proxy::~Proxy() {
 		delete ptr_;
 	}
 
 	template<class T>
-	T* typename shared_ptr<T>::Proxy::operator->() {
+	T* shared_ptr<T>::Proxy::operator->() {
 		return ptr_;
 	}
 
 	template<class T>
-	void typename shared_ptr<T>::Proxy::increment_count() {
+	void shared_ptr<T>::Proxy::increment_count() {
 		++count_;
 	}
 
 	template<class T>
-	void typename shared_ptr<T>::Proxy::decrement_count() {
+	void shared_ptr<T>::Proxy::decrement_count() {
 		--count_;
 	}
 
 	template<class T>
-	long int typename shared_ptr<T>::Proxy::get_count() const {
+	long int shared_ptr<T>::Proxy::get_count() const {
 		return count_;
 	}
 
 	template<class T>
-	T* typename shared_ptr<T>::Proxy::get_ptr() const {
+	T* shared_ptr<T>::Proxy::get_ptr() const {
 		return ptr_;
 	}
 
@@ -80,6 +80,8 @@ namespace ava {
 		}
 		proxy_ptr_ = that.proxy_ptr_;
 		proxy_ptr_->increment_count();
+
+		return *this;
 	}
 
 	template<class T>
