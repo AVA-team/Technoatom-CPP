@@ -83,7 +83,7 @@ namespace ava {
 		if (pos < capacity_ && pos >= size_) {
 			size_ = pos + 1;
 		}
-		else {
+		else if(pos >= capacity_) {
 			std::size_t new_capacity = get_proper_new_capacity(pos + 1);
 			reserve(new_capacity);
 			size_ = pos + 1;
