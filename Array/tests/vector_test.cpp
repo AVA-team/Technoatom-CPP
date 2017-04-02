@@ -517,6 +517,27 @@ TEST(Vector, Move_assignment)
 	ASSERT_TRUE(vec[1] == value);
 }
 
+TEST(Vector, Initializer_list)
+{
+	// GIVEN
+	//
+	// val_1, val_2 - значени€ которыми инициализируетс€ вектор vi
+	// vi вектор, который инициализируетс€ с помощью листа инициализации
+	const int val_1 = 1, val_2 = 3;
+	ava::Vector<int> vi = { val_1, val_2 };
+
+	// WHEN
+	//
+	// ¬ переменные el_1, el_2 записываем первый и второй элемент вектора
+	int el_1 = vi[0], el_2 = vi[1];
+
+	// THEN
+	//
+	// ѕровер€ем, что элементы совпадают с элементами листа инициализации
+	ASSERT_TRUE(el_1 == val_1);
+	ASSERT_TRUE(el_2 == val_2);
+}
+
 
 int main(int argc, char** argv) {
 	testing::InitGoogleTest(&argc, argv);

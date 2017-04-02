@@ -87,13 +87,13 @@ namespace ava {
 
 
 	template <class T>
-	typename ContainerInterface<T>::ArrayIterator ContainerInterface<T>::begin() {
+	typename ContainerInterface<T>::ArrayIterator ContainerInterface<T>::begin() const {
 		return ArrayIterator(data_);
 	}
 
 
 	template <class T>
-	typename ContainerInterface<T>::ArrayIterator ContainerInterface<T>::end() {
+	typename ContainerInterface<T>::ArrayIterator ContainerInterface<T>::end() const {
 		return ArrayIterator(data_ + size_);
 	}
 
@@ -135,7 +135,7 @@ namespace ava {
 
 	template <class T>
 	typename ContainerInterface<T>::ArrayIterator ContainerInterface<T>::ArrayIterator::operator++(int) {
-		ContainerInterface<T>::ArrayIterator to_return(*this);
+		ContainerInterface<T>::ArrayIterator to_return(*this);//use default copy-constructor
 		++(*this);
 		return to_return;
 	}
@@ -143,7 +143,7 @@ namespace ava {
 
 	template <class T>
 	typename ContainerInterface<T>::ArrayIterator ContainerInterface<T>::ArrayIterator::operator--(int) {
-		ContainerInterface<T>::ArrayIterator to_return(*this);
+		ContainerInterface<T>::ArrayIterator to_return(*this);//use default copy-constructor
 		--(*this);
 		return to_return;
 	}

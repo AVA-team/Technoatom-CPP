@@ -84,10 +84,10 @@ namespace ava {
 		virtual void dump() const;
 
 		//! Returns iterator that points to the first element
-		virtual typename ArrayIterator begin();
+		virtual typename ArrayIterator begin() const;
 
 		//! Returns iterator that points to the end element
-		virtual typename ArrayIterator end();
+		virtual typename ArrayIterator end() const;
 	protected:
 		//! Out of range exception text.
 		static const std::string OUT_OF_RANGE_EXC_TEXT;
