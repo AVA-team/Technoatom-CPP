@@ -15,11 +15,11 @@ TEST(Auto_ptr, Assign_ptrs)
 	// p1 - исходный объект auto_ptr который присваивается объекту p2
 	// default_ptr - указатель который хранится в исходном объекте
 	auto_ptr<int> p1(new int(1)), p2;
-	int * default_ptr = p1.get();
+	const int * default_ptr = p1.get();
 	// WHEN
 	p2 = p1;
 	// THEN
-	// 
+	//
 	// Проверяем, что владение ресурсом перешло к объекту p2 и что объект p1 больше не владеет ресурсом
 	ASSERT_TRUE(p2.get() == default_ptr);
 	ASSERT_TRUE(p1.get() == nullptr);
@@ -43,7 +43,7 @@ TEST(Auto_ptr, Reset)
 	int curr_val = *p1;
 
 	// THEN
-	// 
+	//
 	// Проверяем, что умный указатель хранит новое значение
 	ASSERT_TRUE(curr_val == new_val);
 }
@@ -64,7 +64,7 @@ TEST(Auto_ptr, Release)
 	int* resource = p1.release(), *holding_resource = p1.get();
 
 	// THEN
-	// 
+	//
 	// Проверяем, что умный указатель освободил ресурс и что ресурс не изменился
 	ASSERT_TRUE(holding_resource == nullptr);
 	ASSERT_TRUE(*resource == val);
@@ -145,7 +145,7 @@ TEST(Unique_ptr, Reset)
 	int curr_val = *p1;
 
 	// THEN
-	// 
+	//
 	// Проверяем, что умный указатель хранит новое значение
 	ASSERT_TRUE(curr_val == new_val);
 }
@@ -166,7 +166,7 @@ TEST(Unique_ptr, Release)
 	int* resource = p1.release(), *holding_resource = p1.get();
 
 	// THEN
-	// 
+	//
 	// Проверяем, что умный указатель освободил ресурс и что ресурс не изменился
 	ASSERT_TRUE(holding_resource == nullptr);
 	ASSERT_TRUE(*resource == val);
