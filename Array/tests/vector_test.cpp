@@ -6,24 +6,15 @@ TEST(Vector, Constructor_with_capacity)
 {
 	// GIVEN:
 	//
-	// vec_default - вектор созданный конструктором по умолчанию
-	// vec - вектор созданный конструктором, принимающим величину вместимости (capacity)
-	// init_capacity - вместимость вектора vec
 	ava::Vector<int> vec_default;
 	const size_t init_capacity = 15;
-	ava::Vector<int> vec(init_capacity);
-
 	// WHEN:
 	//
-	// vec_default_capacity - вместимость вектора vec_default
-	// vec_default_size - размер вектора vec_default
-	std::size_t vec_default_capacity = vec_default.capacity();
-	std::size_t vec_default_size = vec_default.size();
-
+	ava::Vector<int> vec(init_capacity);
 	// THEN:
 	//
-	// вместимость и размер vec_default должны равняться 10 и 0 соответственно
-	// вместимость и размер vec должны равняться 15 и 0 соответственно
+	std::size_t vec_default_capacity = vec_default.capacity();
+	std::size_t vec_default_size = vec_default.size();
 	ASSERT_TRUE(vec_default_capacity == ava::default_capacity);
 	ASSERT_TRUE(vec_default_size == 0);
 	ASSERT_TRUE(vec.capacity() == init_capacity);
@@ -34,20 +25,13 @@ TEST(Vector, Constructor_with_size_and_value)
 {
 	// GIVEN:
 	//
-	// init_size - размер будующего вектора
-	// init_value - величина, которой заполнятся элементы будующего стэка
 	const size_t init_size = 2;
 	const int init_value = 5;
-
 	// WHEN:
 	//
-	// vec - вектор созданный конструктором который принимает размер вектора и величину, которую он присвоит всем элементам
 	ava::Vector<int> vec(init_size, init_value);
-
 	// THEN:
 	//
-	// размер вектора должен равняться init_size
-	// элементы вектора должны равняться init_value
 	ASSERT_TRUE(vec.size() == init_size);
 	ASSERT_TRUE(vec[0] == init_value);
 	ASSERT_TRUE(vec[1] == init_value);
@@ -57,20 +41,19 @@ TEST(Vector, Insert)
 {
 	// GIVEN:
 	//
-	// vec - вектор созданный конструктором по умолчанию (с вместимостью 10) и с двумя элементами (1, 2)
+	int first_el = 1, second_el = 2, val_to_insert = 0;
+	std::size_t insert_pos = 1, insert_count = 2;
 	ava::Vector<int> vec;
-	vec.push_back(1);
-	vec.push_back(2);
-
+	vec.push_back(first_el);
+	vec.push_back(second_el);
 	// WHEN:
 	//
-	// Вставляем после первого элемента ещё два элемента равных 0
-	vec.insert(1, 2, 0);
-
+	vec.insert(insert_pos, insert_count, val_to_insert);
 	// THEN:
 	//
-	// Должен получиться вектор [1, 0, 0, 2]. Проверяем
-	ASSERT_TRUE( (vec[0] == 1) && (vec[1] == 0) && (vec[2] == 0) && (vec[3] == 2) );
+	int first_inserted_el = vec[insert_pos],
+		second_inserted_el = vec[insert_pos + 1];
+	ASSERT_TRUE( first_inserted_el == val_to_insert && second_inserted_el == val_to_insert);
 }
 
 
@@ -78,19 +61,13 @@ TEST(Vector, Push_back)
 {
 	// GIVEN:
 	//
-	// vec - вектор созданный конструктором по умолчанию
-	// value_to_push - значение, которое кладём в вектор
 	ava::Vector<int> vec;
 	int value_to_push = 15;
-
 	// WHEN:
 	//
-	// кладём value_to_push в вектор
 	vec.push_back(value_to_push);
-
 	// THEN:
 	//
-	// Проверяем, что последний элемент в векторе равен тому, который мы туда положили
 	ASSERT_TRUE(vec.back() == value_to_push);
 }
 
@@ -98,21 +75,15 @@ TEST(Vector, Push_back_with_auto_incrementing_capacity)
 {
 	// GIVEN:
 	//
-	// init_capacity - начальная вместимость вектора
-	// vec - вектор созданный конструктором, который принимает величину вместимости (capacity). vec содержит два элемента: 10 и 20
 	std::size_t init_capacity = 2;
 	ava::Vector<int> vec(init_capacity);
 	vec.push_back(10);
 	vec.push_back(20);
-
 	// WHEN:
 	//
-	// Кладём третий элемент 30
 	vec.push_back(30);
-
 	// THEN:
 	//
-	// Проверяем, что вместимость (capacity) вектора увеличилась
 	ASSERT_TRUE(vec.capacity() > init_capacity);
 }
 
@@ -134,16 +105,12 @@ TEST_F(Vector_Object_For_Testing_Single_Vec, Copy_constructor)
 {
 	// GIVEN:
 	//
-	// vec_ - вектор проинициализированный в классе Vector_Object_For_Testing_Single_Vec
 
 	// WHEN:
 	// 
-	// copy_vec - вектор скопированный из vec_ (конструктором копирования)
 	ava::Vector<int> copy_vec(vec_);
-
 	// THEN:
 	//
-	// Размеры, вместимости (capacity) и элементы исходного и скопированного векторов должны совпадать
 	ASSERT_TRUE(vec_.size() == copy_vec.size());
 	ASSERT_TRUE(vec_.capacity() == copy_vec.capacity());
 	ASSERT_TRUE(copy_vec[0] == vec_[0]);
@@ -154,17 +121,12 @@ TEST_F(Vector_Object_For_Testing_Single_Vec, Pop_back)
 {
 	// GIVEN:
 	//
-	// vec_ - вектор проинициализированный в классе Vector_Object_For_Testing_Single_Vec
-	// init_size_ = 2 - размер вектора vec_ (опеределено в классе Vector_Object_For_Testing_Single_Vec)
 
 	// WHEN:
 	// 
-	// Вытаскиваем элемент из вектора
 	vec_.pop_back();
-
 	// THEN:
 	//
-	// Размер вектора должен уменьшиться на 1
 	ASSERT_TRUE(vec_.size() == (init_size_ - 1));
 }
 
@@ -172,18 +134,13 @@ TEST_F(Vector_Object_For_Testing_Single_Vec, Resize_With_Reduction)
 {
 	// GIVEN:
 	//
-	// vec_ - вектор проинициализированный в классе Vector_Object_For_Testing_Single_Vec (vec_[0] = 10, vec_[1] = 20)
-	// init_size_ = 2 - размер вектора vec_ (опеределено в классе Vector_Object_For_Testing_Single_Vec)
 
 	// WHEN:
 	//
-	// изменяем размер вектора с 2 на 1 и записываем новый размер вектора в vec_new_size
 	vec_.resize(1);
-	size_t vec_new_size = vec_.size();
-
 	// THEN:
 	//
-	// Проверяем, что размер вектора стал равен 1 и его элемент равен 10
+	std::size_t vec_new_size = vec_.size();
 	ASSERT_TRUE(vec_new_size == 1);
 	ASSERT_TRUE(vec_[0] == 10);
 }
@@ -192,20 +149,13 @@ TEST_F(Vector_Object_For_Testing_Single_Vec, Resize_With_Bigger_Size)
 {
 	// GIVEN:
 	//
-	// vec_ - вектор проинициализированный в классе Vector_Object_For_Testing_Single_Vec (vec_[0] = 10, vec_[1] = 20)
-	// init_size_ = 2 - размер вектора vec_ (опеределено в классе Vector_Object_For_Testing_Single_Vec)
-	// value_for_new_elements - значение которое приписывается новым элементами при изменении размера в большую сторону
 	const int value_for_new_elements = 777;
-
 	// WHEN:
 	//
-	// изменяем размер вектора с 2 на 3 и записываем новый размер вектора в vec_new_size
 	vec_.resize(3, value_for_new_elements);
-	size_t vec_new_size = vec_.size();
-
 	// THEN:
 	//
-	// Проверяем, что размер вектора стал равен 3 и его элемент равен 10
+	std::size_t vec_new_size = vec_.size();
 	ASSERT_TRUE(vec_new_size == 3);
 	ASSERT_TRUE(vec_[0] == 10);
 	ASSERT_TRUE(vec_[1] == 20);
@@ -216,21 +166,13 @@ TEST_F(Vector_Object_For_Testing_Single_Vec, Resize_With_Bigger_Capacity)
 {
 	// GIVEN:
 	//
-	// vec_ - вектор проинициализированный в классе Vector_Object_For_Testing_Single_Vec (vec_[0] = 10, vec_[1] = 20)
-	// init_size_ = 2 - размер вектора vec_ (опеределено в классе Vector_Object_For_Testing_Single_Vec)
-	// init_capacity_ - вместимость vec_ (= 3)
-	// value_for_new_elements - значение которое приписывается новым элементами при изменении размера в большую сторону
 	const int value_for_new_elements = 777;
-
 	// WHEN:
 	//
-	// изменяем размер вектора с 2 на 3 и записываем новый размер вектора в vec_new_size, а новую вместимость в vec_new_capacity
 	vec_.resize(4, value_for_new_elements);
-	size_t vec_new_size = vec_.size(), vec_new_capacity = vec_.capacity();
-
 	// THEN:
 	//
-	// Проверяем, что размер вектора стал равен 4, вместимость увеличилась, а новые элементы равны value_for_new_elements
+	std::size_t vec_new_size = vec_.size(), vec_new_capacity = vec_.capacity();
 	ASSERT_TRUE(vec_new_size == 4);
 	ASSERT_TRUE(vec_new_capacity > init_capacity_);
 	ASSERT_TRUE(vec_[2] == value_for_new_elements);
@@ -241,22 +183,13 @@ TEST_F(Vector_Object_For_Testing_Single_Vec, Assign_With_Count_Less_Than_Capacit
 {
 	// GIVEN:
 	//
-	// vec_ - вектор проинициализированный в классе Vector_Object_For_Testing_Single_Vec (vec_[0] = 10, vec_[1] = 20)
-	// init_size_ = 2 - размер вектора vec_ (опеределено в классе Vector_Object_For_Testing_Single_Vec)
-	// init_capacity_ - вместимость vec_ (= 3)
-	// value_for_new_elements - значение которое приписывается новым элементами
 	const int value_for_new_elements = 777;
-
 	// WHEN:
 	//
-	// Присваиваем вектору новое содержимое: один элемент, который равен value_for_new_elements
-	// Записываем новый размер вектора в vec_size, а новую вместимость в vec_capacity
 	vec_.assign(1, value_for_new_elements);
-	size_t vec_size = vec_.size(), vec_capacity = vec_.capacity();
-
 	// THEN:
 	//
-	// Проверяем, что размер вектора стал равен 1, вместимость не изменилась, а единственный элемент равен 
+	size_t vec_size = vec_.size(), vec_capacity = vec_.capacity();
 	ASSERT_TRUE(vec_size == 1);
 	ASSERT_TRUE(vec_capacity == init_capacity_);
 	ASSERT_TRUE(vec_[0] == value_for_new_elements);
@@ -266,22 +199,13 @@ TEST_F(Vector_Object_For_Testing_Single_Vec, Assign_With_Count_Less_Than_Capacit
 {
 	// GIVEN:
 	//
-	// vec_ - вектор проинициализированный в классе Vector_Object_For_Testing_Single_Vec (vec_[0] = 10, vec_[1] = 20)
-	// init_size_ = 2 - размер вектора vec_ (опеределено в классе Vector_Object_For_Testing_Single_Vec)
-	// init_capacity_ - вместимость vec_ (= 3)
-	// value_for_new_elements - значение которое приписывается новым элементами
 	const int value_for_new_elements = 777;
-
 	// WHEN:
 	//
-	// Присваиваем вектору новое содержимое: три элемента, каждый из которых равен value_for_new_elements
-	// Записываем новый размер вектора в vec_size, а новую вместимость в vec_capacity
 	vec_.assign(3, value_for_new_elements);
-	size_t vec_size = vec_.size(), vec_capacity = vec_.capacity();
-
 	// THEN:
 	//
-	// Проверяем, что размер вектора стал равен 3, вместимость не изменилась, а три элемента равны  value_for_new_elements
+	std::size_t vec_size = vec_.size(), vec_capacity = vec_.capacity();
 	ASSERT_TRUE(vec_size == 3);
 	ASSERT_TRUE(vec_capacity == init_capacity_);
 	ASSERT_TRUE(vec_[0] == value_for_new_elements);
@@ -293,22 +217,13 @@ TEST_F(Vector_Object_For_Testing_Single_Vec, Assign_With_Count_Bigger_Than_Capac
 {
 	// GIVEN:
 	//
-	// vec_ - вектор проинициализированный в классе Vector_Object_For_Testing_Single_Vec (vec_[0] = 10, vec_[1] = 20)
-	// init_size_ = 2 - размер вектора vec_ (опеределено в классе Vector_Object_For_Testing_Single_Vec)
-	// init_capacity_ - вместимость vec_ (= 3)
-	// value_for_new_elements - значение которое приписывается новым элементами
 	const int value_for_new_elements = 777;
-
 	// WHEN:
 	//
-	// Присваиваем вектору новое содержимое: четыре элемента, каждый из которых равен value_for_new_elements
-	// Записываем новый размер вектора в vec_size, а новую вместимость в vec_capacity
 	vec_.assign(4, value_for_new_elements);
-	size_t vec_size = vec_.size(), vec_capacity = vec_.capacity();
-
 	// THEN:
 	//
-	// Проверяем, что размер вектора стал равен 4, вместимость увеличилась, а четыре элемента равны  value_for_new_elements
+	size_t vec_size = vec_.size(), vec_capacity = vec_.capacity();
 	ASSERT_TRUE(vec_size == 4);
 	ASSERT_TRUE(vec_capacity > init_capacity_);
 	ASSERT_TRUE(vec_[0] == value_for_new_elements);
@@ -321,20 +236,12 @@ TEST_F(Vector_Object_For_Testing_Single_Vec, Reserve_with_less_capacity)
 {
 	// GIVEN:
 	//
-	// vec_ - вектор проинициализированный в классе Vector_Object_For_Testing_Single_Vec (vec_[0] = 10, vec_[1] = 20)
-	// init_size_ = 2 - размер вектора vec_ (опеределено в классе Vector_Object_For_Testing_Single_Vec)
-	// init_capacity_ - вместимость vec_ (= 3)
-	// new_less_capicity - новая вместимость вектора, которая меньше начальной (init_capacity_)
 	const size_t new_less_capicity = 2;
-
 	// WHEN:
 	//
-	// Устанавливаем вектор в состояние, в котором он способен хранить new_less_capicity элементов
 	vec_.reserve(new_less_capicity);
-
 	// THEN:
 	//
-	// Проверяем, что размер вектора и вместимость не изменились
 	ASSERT_TRUE(vec_.size() == init_size_);
 	ASSERT_TRUE(vec_.capacity() == init_capacity_);
 }
@@ -343,20 +250,12 @@ TEST_F(Vector_Object_For_Testing_Single_Vec, Reserve_with_bigger_capacity)
 {
 	// GIVEN:
 	//
-	// vec_ - вектор проинициализированный в классе Vector_Object_For_Testing_Single_Vec (vec_[0] = 10, vec_[1] = 20)
-	// init_size_ = 2 - размер вектора vec_ (опеределено в классе Vector_Object_For_Testing_Single_Vec)
-	// init_capacity_ - вместимость vec_ (= 3)
-	// new_less_capicity - новая вместимость вектора, которая меньше начальной (init_capacity_)
 	const size_t new_bigger_capicity = 4;
-
 	// WHEN:
 	//
-	// Устанавливаем вектор в состояние, в котором он способен хранить new_less_capicity элементов
 	vec_.reserve(new_bigger_capicity);
-
 	// THEN:
 	//
-	// Проверяем, что размер вектора не изменилась, а вместимость увеличилась
 	ASSERT_TRUE(vec_.size() == init_size_);
 	ASSERT_TRUE(vec_.capacity() > init_capacity_);
 }
@@ -365,19 +264,13 @@ TEST_F(Vector_Object_For_Testing_Single_Vec, Shrink_to_fit)
 {
 	// GIVEN:
 	//
-	// vec_ - вектор проинициализированный в классе Vector_Object_For_Testing_Single_Vec (vec_[0] = 10, vec_[1] = 20)
-	// init_size_ = 2 - размер вектора vec_ (опеределено в классе Vector_Object_For_Testing_Single_Vec)
-	// init_capacity_ - вместимость vec_ (= 3)
-	// new_less_capicity - новая вместимость вектора, которая меньше начальной (init_capacity_)
 
 	// WHEN:
 	//
 	// Сокращаем вместимость вектора до текущего размера
 	vec_.shrink_to_fit();
-
 	// THEN:
 	//
-	// Проверяем, что размер вектора не изменился, а вместимость стала равна размеру
 	ASSERT_TRUE(vec_.size() == init_size_);
 	ASSERT_TRUE(vec_.capacity() == init_size_);
 }
@@ -402,21 +295,16 @@ TEST_F(Vector_Objects_For_Cheking_Equality, Check_Capacity_Equality)
 {
 	// GIVEN:
 	// 
-	// init_vec_ - исходный вектор с параметрами: size = 3, capacity = 3, init_vec_[0] = 10, init_vec_[1] = 20, init_vec_[2] = 30
-	// first_assigned_vec_ - первый присвоеный вектор (first_assigned_vec_ = init_vec_)
-	// secong_assigned_vec_ - второй присвоеный вектор (secong_assigned_vec_ = first_assigned_vec_ = init_vec_)
 
 	// WHEN
 	// 
-	// Записываем вместимости исходного вектора и двух присвоинных векторов в переменные
-	// init_cap, first_assigned_cap, second_assigned_cap
-	size_t init_cap = init_vec_.capacity(),
-		first_assigned_cap = first_assigned_vec_.capacity(),
-		second_assigned_cap = second_assigned_vec_.capacity();
 
 	// THEN
 	//
 	// Проверяем, что вместимости двух присвоинных векторов равны вместимости исходного вектора
+	size_t init_cap = init_vec_.capacity(),
+		first_assigned_cap = first_assigned_vec_.capacity(),
+		second_assigned_cap = second_assigned_vec_.capacity();
 	ASSERT_TRUE(first_assigned_cap == init_cap);
 	ASSERT_TRUE(second_assigned_cap == init_cap);
 }
@@ -425,21 +313,15 @@ TEST_F(Vector_Objects_For_Cheking_Equality, Check_Size_Equality)
 {
 	// GIVEN:
 	// 
-	// init_vec_ - исходный вектор с параметрами: size = 3, capacity = 3, init_vec_[0] = 10, init_vec_[1] = 20, init_vec_[2] = 30
-	// first_assigned_vec_ - первый присвоеный вектор (first_assigned_vec_ = init_vec_)
-	// secong_assigned_vec_ - второй присвоеный вектор (secong_assigned_vec_ = first_assigned_vec_ = init_vec_)
 
 	// WHEN
 	// 
-	// Записываем размеры исходного вектора и двух присвоинных векторов в переменные
-	// init_size, first_assigned_size, second_assigned_size
-	size_t init_size = init_vec_.size(),
-		first_assigned_size = first_assigned_vec_.size(),
-		second_assigned_size = second_assigned_vec_.size();
 
 	// THEN
 	//
-	// Проверяем, что размеры двух присвоинных векторов равны размеру исходного вектора
+	size_t init_size = init_vec_.size(),
+		first_assigned_size = first_assigned_vec_.size(),
+		second_assigned_size = second_assigned_vec_.size();
 	ASSERT_TRUE(first_assigned_size == init_size);
 	ASSERT_TRUE(second_assigned_size == init_size);
 }
@@ -448,17 +330,12 @@ TEST_F(Vector_Objects_For_Cheking_Equality, Check_Elements_Equality)
 {
 	// GIVEN:
 	// 
-	// init_vec_ - исходный вектор с параметрами: size = 3, capacity = 3, init_vec_[0] = 10, init_vec_[1] = 20, init_vec_[2] = 30
-	// first_assigned_vec_ - первый присвоеный вектор (first_assigned_vec_ = init_vec_)
-	// secong_assigned_vec_ - второй присвоеный вектор (secong_assigned_vec_ = first_assigned_vec_ = init_vec_)
 
 	// WHEN
 	// 
-	// Ничего не делаем: присвоение уже было в классе Vector_Objects_For_Cheking_Equality
 
 	// THEN
 	//
-	// Проверяем, что элементы присвоинных массивов равны элементам исходного массива
 	ASSERT_TRUE(first_assigned_vec_[0] == init_vec_[0]);
 	ASSERT_TRUE(first_assigned_vec_[1] == init_vec_[1]);
 	ASSERT_TRUE(first_assigned_vec_[2] == init_vec_[2]);
@@ -471,20 +348,13 @@ TEST(Vector, Move_constructor)
 {
 	// GIVEN
 	//
-	// vec_size - размер вектора временного объекта, которым иницициализируется вектор vec
-	// value - значения которыми инициализируется временный вектор
 	std::size_t vec_size = 2;
 	const int value = 777;
-
 	// WHEN
 	//
-	// Создаём вектор с помощью конструктора перемещения
 	ava::Vector<int> vec(ava::Vector<int>(vec_size, value));
-
 	// THEN
 	//
-	// Проверяем, что временный вектор (который уже сдох) эквивалентен вектору vec
-	// Проверка идёт по всем полям (размер, вместимость) и элементам
 	ASSERT_TRUE(vec.size() == vec_size);
 	ASSERT_TRUE(vec.capacity() == vec_size);
 	ASSERT_TRUE(vec[0] == value);
@@ -495,22 +365,14 @@ TEST(Vector, Move_assignment)
 {
 	// GIVEN:
 	// 
-	// vec_size - размер вектора временного объекта, которым иницициализируется вектор vec
-	// value - значения которыми инициализируется временный вектор
-	// vec - вектор, у которого вызовится оператор присваивания - перемещения
 	std::size_t vec_size = 2;
 	const int value = 777;
 	ava::Vector<int> vec;
-
 	// WHEN:
 	// 
-	// Определяем вектор vec с помощью оператора присваивания-перемещения
 	vec = ava::Vector<int>(vec_size, value);
-
 	// THEN
 	//
-	// Проверяем, что временный объект (который уже сдох) эквивалентен вектору vec
-	// Проверяются все поля (размер и вместимость)
 	ASSERT_TRUE(vec.size() == vec_size);
 	ASSERT_TRUE(vec.capacity() == vec_size);
 	ASSERT_TRUE(vec[0] == value);
@@ -521,23 +383,303 @@ TEST(Vector, Initializer_list)
 {
 	// GIVEN
 	//
-	// val_1, val_2 - значения которыми инициализируется вектор vi
-	// vi вектор, который инициализируется с помощью листа инициализации
 	const int val_1 = 1, val_2 = 3;
-	ava::Vector<int> vi = { val_1, val_2 };
-
 	// WHEN
 	//
-	// В переменные el_1, el_2 записываем первый и второй элемент вектора
-	int el_1 = vi[0], el_2 = vi[1];
-
+	ava::Vector<int> vi = { val_1, val_2 };
 	// THEN
 	//
-	// Проверяем, что элементы совпадают с элементами листа инициализации
+	int el_1 = vi[0], el_2 = vi[1];
 	ASSERT_TRUE(el_1 == val_1);
 	ASSERT_TRUE(el_2 == val_2);
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+// VECTOR<BOOL> TESTS
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(Vector_bool, Copy_constructor)
+{
+	// GIVEN
+	//
+	ava::Vector<bool> vb;
+	bool first_bit_val = true, second_bit_val = false;
+	vb[0] = first_bit_val;
+	vb[1] = second_bit_val;
+	// WHEN
+	//
+	ava::Vector<bool> copy_vb(vb);
+	// THEN
+	//
+	bool first_bit_copy = copy_vb[0], second_bit_copy = copy_vb[1];
+	ASSERT_TRUE(vb.size() == copy_vb.size());
+	ASSERT_TRUE(first_bit_copy == first_bit_val);
+	ASSERT_TRUE(second_bit_copy == second_bit_val);
+}
+
+TEST(Vector_bool, Initializer_list)
+{
+	// GIVEN
+	//
+	bool first_bit_val = true, second_bit_val = false;
+	// WHEN
+	//
+	ava::Vector<bool> vb = { first_bit_val, second_bit_val };
+	// THEN
+	//
+	bool first_bit = vb[0], second_bit = vb[1];
+	ASSERT_TRUE(vb.size() == 2);
+	ASSERT_TRUE(first_bit == first_bit_val);
+	ASSERT_TRUE(second_bit == second_bit_val);
+}
+
+TEST(Vector_bool, Move_constructor)
+{
+	// GIVEN
+	//
+	// size - размер вектора
+	// bits_val - значение всех битов вектора
+	std::size_t size = 2;
+	bool bits_val = true;
+	// WHEN
+	//
+	ava::Vector<bool> vb(ava::Vector<bool>(2, bits_val));
+	// THEN
+	//
+	bool first_bit = vb[0], second_bit = vb[1];
+	ASSERT_TRUE(vb.size() == size);
+	ASSERT_TRUE(first_bit == bits_val);
+	ASSERT_TRUE(second_bit == bits_val);
+}
+
+TEST(Vector_bool, Assignment_operator)
+{
+	// GIVEN
+	//
+	// initial_size - размер исходного вектора
+	// first_bit_val, second_bit_val - значение первых двух битов исходного вектора
+	// vb - исходный вектор
+	// vb_assigned - вектор которому будут присвоен вектор vb
+	std::size_t initial_size = 2;
+	bool first_bit_val = true, second_bit_val = false;
+	ava::Vector<bool> vb = { first_bit_val, second_bit_val }, vb_assigned;
+	// WHEN
+	//
+	// Присвоение
+	vb_assigned = vb;
+	// THEN
+	//
+	// Проверяем что исходный и присвоенные векторы равны
+	auto size = vb_assigned.size();
+	bool first_bit = vb_assigned[0], second_bit = vb[1];
+	ASSERT_TRUE(size == initial_size);
+	ASSERT_TRUE(first_bit == first_bit_val);
+	ASSERT_TRUE(second_bit == second_bit_val);
+}
+
+TEST(Vector_bool, Move_assignment_operator)
+{
+	// GIVEN
+	//
+	std::size_t initial_size = 2;
+	bool first_bit_val = true, second_bit_val = false;
+	ava::Vector<bool> vb;
+	// WHEN
+	//
+	vb = ava::Vector<bool>{ first_bit_val, second_bit_val };
+	// THEN
+	//
+	auto size = vb.size();
+	bool first_bit = vb[0], second_bit = vb[1];
+	ASSERT_TRUE(size == initial_size);
+	ASSERT_TRUE(first_bit == first_bit_val);
+	ASSERT_TRUE(second_bit == second_bit_val);
+}
+
+TEST(Vector_bool, Bracket_operator)
+{
+	// GIVEN
+	//
+	bool first_bit_val = true, second_bit_val = false, new_first_bit_val = false;
+	ava::Vector<bool> vb{ first_bit_val, second_bit_val };
+	// WHEN
+	//
+	vb[0] = new_first_bit_val;
+	auto first_bit = vb.front();
+	// THEN
+	//
+	ASSERT_TRUE(first_bit == new_first_bit_val);
+}
+
+TEST(Vector_bool, Swap)
+{
+	// GIVEN
+	//
+	bool initial_first_bit_vb1 = true, initial_second_bit_vb1 = false,
+		initial_first_bit_vb2 = initial_second_bit_vb1, initial_second_bit_vb2 = initial_first_bit_vb1;
+	ava::Vector<bool> vb1{ true, false }, vb2{ false, true };
+	// WHEN
+	//
+	vb1.swap(vb2);
+	// THEN
+	//
+	bool first_bit_vb1 = vb1[0], second_bit_vb1 = vb1[1];
+	ASSERT_TRUE(vb1.size() == vb2.size());
+	ASSERT_TRUE(first_bit_vb1 == initial_first_bit_vb2);
+	ASSERT_TRUE(second_bit_vb1 == initial_second_bit_vb2);
+}
+
+TEST(Vector_bool, Push_back)
+{
+	// GIVEN
+	//
+	bool first_bit_val = false, val_to_push = true;
+	ava::Vector<bool> vb(2, first_bit_val);
+	// WHEN
+	//
+	vb.push_back(val_to_push);
+	// THEN
+	//
+	bool last_bit = vb[2];
+	ASSERT_TRUE(last_bit == val_to_push);
+}
+
+TEST(Vector_bool, Push_back_with_full_vector)
+{
+	// GIVEN
+	//
+	bool bits_val = false, val_to_push = true;
+	ava::Vector<bool> vb(32, bits_val);
+	vb.shrink_to_fit();
+	// WHEN
+	//
+	vb.push_back(val_to_push);
+	// THEN
+	//
+	auto last_bit = vb[32];
+	ASSERT_TRUE(last_bit == val_to_push);
+}
+
+TEST(Vector_bool, Insert)
+{
+	// GIVEN
+	//
+	bool bits_val = false, val_to_insert = true;
+	std::size_t initial_size = 32;
+	ava::Vector<bool> vb(initial_size, bits_val);
+	vb.shrink_to_fit();
+	std::size_t insert_pos = 20, insert_count = 2;
+	// WHEN
+	//
+	vb.insert(insert_pos, insert_count, val_to_insert);
+	// THEN
+	//
+	bool first_inserted_bit = vb[insert_pos],
+		second_inserted_bit = vb[insert_pos + 1];
+	ASSERT_TRUE(vb.size() == (initial_size + insert_count));
+	ASSERT_TRUE(first_inserted_bit == val_to_insert);
+	ASSERT_TRUE(second_inserted_bit == val_to_insert);
+}
+
+TEST(Vector_bool, Resize)
+{
+	// GIVEN
+	//
+	std::size_t new_size = 3;
+	bool val_for_new_bits = true;
+	ava::Vector<bool> vb{ false, false };
+	// WHEN
+	//
+	vb.resize(3, val_for_new_bits);
+	// THEN
+	//
+	auto new_actual_size = vb.size();
+	bool new_bit = vb.back();
+	ASSERT_TRUE(new_actual_size == new_size);
+	ASSERT_TRUE(new_bit == val_for_new_bits);
+}
+
+TEST(Vector_bool, Assign)
+{
+	// GIVEN
+	//
+	bool initial_bits_val = false, new_bits_val = true;
+	std::size_t new_size = 2;
+	ava::Vector<bool> vb(1, initial_bits_val);
+	// WHEN
+	//
+	vb.assign(new_size, new_bits_val);
+	// THEN
+	//
+	std::size_t new_actual_size = vb.size();
+	bool new_first_bit_val = vb[0], new_second_bit_val = vb[1];
+	ASSERT_TRUE(new_actual_size == new_size);
+	ASSERT_TRUE(new_first_bit_val == new_bits_val);
+	ASSERT_TRUE(new_second_bit_val == new_bits_val);
+}
+
+TEST(Vector_bool, At)
+{
+	// GIVEN
+	//
+	bool initial_first_bit = true;
+	ava::Vector<bool> vb(1, initial_first_bit);
+	// WHEN
+	//
+	bool first_bit = vb.at(0);
+	// THEN
+	//
+	ASSERT_TRUE(first_bit == initial_first_bit);
+}
+
+TEST(Vector_bool, Front)
+{
+	// GIVEN
+	//
+	bool first_bit_val = true,
+		second_bit_val = false;
+	ava::Vector<bool> vb{ first_bit_val, second_bit_val };
+	// WHEN
+	//
+	bool front_bit = vb.front();
+	// THEN
+	//
+	ASSERT_TRUE(front_bit == first_bit_val);
+}
+
+TEST(Vector_bool, Back)
+{
+	// GIVEN
+	//
+	bool first_bit_val = true,
+		second_bit_val = false;
+	ava::Vector<bool> vb{ first_bit_val, second_bit_val };
+	// WHEN
+	//
+	bool back_bit = vb.back();
+	// THEN
+	//
+	ASSERT_TRUE(back_bit == second_bit_val);
+}
+
+TEST(Vector_bool, Iterators)
+{
+	// GIVEN
+	//
+	bool initial_bits_val = false,
+		new_bits_val = true;
+	ava::Vector<bool> vb(2, initial_bits_val);
+	// WHEN
+	//
+	for (auto it = vb.begin(); it != vb.end(); ++it) {
+		*it = new_bits_val;
+	}
+	// THEN
+	bool first_bit = vb[0], second_bit = vb[1];
+	ASSERT_TRUE(first_bit == new_bits_val);
+	ASSERT_TRUE(second_bit == new_bits_val);
+}
 
 int main(int argc, char** argv) {
 	testing::InitGoogleTest(&argc, argv);

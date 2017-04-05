@@ -97,23 +97,53 @@ namespace ava {
 	template<>
 	class Vector<bool> {
 	public:
+		//! Default constructor
 		Vector();
-		explicit Vector(std::size_t capacity_);
+		//! One argument constructor
+		//!
+		//! @param capacity is a capacity in terms of bits
+		explicit Vector(std::size_t capacity);
 		Vector(const Vector<bool>& that);
+		//! Constructor with initializer list to use expression like Vector<bool> vb = {true, false}
+		//!
+		//! @param init_list is an initializer list of type bool
 		Vector(const std::initializer_list<bool>& init_list);
+		//! Move-constructor
 		Vector(Vector<bool>&& that);
+		//! Two-argument constructor
+		//!
+		//! @param size is a size in terms of bits
+		//! @param val is a value for all bits
 		explicit Vector(const std::size_t size, bool val);
 		~Vector();
-		class BitReference;
+		//! Class for bit reference
+		class BitReference {
+		public:
+			BitReference(std::size_t element_pos, std::size_t bit_pos, uint* data);
+			~BitReference();
+			//! Returns value of holding bit
+			bool get_value() const;
+			//! Sets value of holding bit
+			void set_value(bool value);
+			const BitReference& operator=(const BitReference& that);
+			const BitReference& operator=(bool val);
+			bool operator==(bool that);
+			operator bool();
+
+		private:
+			std::size_t element_pos_, bit_pos_;
+			uint* data_;
+		};
+		//! Iterator class for vector<bool>
 		class BitIterator : public std::iterator<std::forward_iterator_tag, BitReference> {
 		public:
 			BitIterator(std::size_t element_pos, std::size_t bit_pos, uint* data);
 			~BitIterator();
 			BitReference operator*();
-			BitIterator& operator++();
-			BitIterator& operator--();
-			BitIterator& operator++(int);//postfix
-			BitIterator& operator--(int);//postfix
+			BitIterator operator++();
+			BitIterator operator--();
+			BitIterator operator++(int);//postfix
+			BitIterator operator--(int);//postfix
 			bool operator==(const BitIterator& that);
 			bool operator!= (const BitIterator& that);
 		private:
@@ -132,6 +162,8 @@ namespace ava {
 		//
 		// @param pos is the position of returning element
 		bool operator[](const std::size_t pos) const;
+		//! Returns current vector size in terms of bits
+		inline std::size_t size() { return bits_size_; }
 		//! Exchanges the contents of the array with those of other.
 		//! Does not cause references to associate with the other array.
 		//!
@@ -159,53 +191,61 @@ namespace ava {
 		//!
 		//! @param new_size is a new size for a vector
 		//! @param value_to_copy is a value that will be copied to each new elements in data sotrage if new size is greater than current size
-		void resize(std::size_t new_size, bool value_to_copy = false);
+		void resize(std::size_t new_bits_size, bool val);
 		//! Requests that the vector capacity be at least enough to contain new_capacity elements.
 		//! If new capacity is greater than the current vector capacity, the function causes the container to reallocate its storage increasing its capacity to new capacity (or greater).
 		//! In all other cases, the function call does not cause a reallocation and the vector capacity is not affected
 		//! This function has no effect on the vector size and cannot alter its elements.
 		//! 
-		//! @param new_capacity is a new capacity for the current vector
-		void reserve(std::size_t new_capacity);
+		//! @param new_bits_capacity is a new capacity for the current vector in terms of bits
+		void reserve(std::size_t new_bits_capacity);
 		//! Requests the container to reduce its capacity to fit its size.
 		//! This may cause a reallocation, but has no effect on the vector size and cannot alter its elements.
 		void shrink_to_fit();
 		//! Returns capacity of the current vector
-		std::size_t capacity() const { return capacity_; }
+		std::size_t capacity() const { return bits_capacity_; }
 		//! Assign vector content.
 		//! Assigns new contents to the vector, replacing its current contents, and modifying its size accordingly.
-		void assign(std::size_t count, bool value_to_copy);
+		void assign(std::size_t count, bool val);
 		//! Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
 		void clear();
+		//! Return value of a bit in specific position
+		//!
+		//! @param pos is a position of a bit
 		bool at(const std::size_t pos) const;
+		//! Returns first bit in the vector
 		bool front() const;
+		//! Returns last bit in the vector
 		bool back() const;
+		//! Checks whether the vector is empty
 		bool empty() const;
+		//! Returns iterator to the first bit
 		BitIterator begin() const;
+		//! Returns iterator to the last bit
 		BitIterator end() const;
 	private:
-		void clear();
-		std::size_t get_proper_new_capacity(std::size_t new_size);
-		class BitReference {
-		public:
-			BitReference(std::size_t element_pos, std::size_t bit_pos, uint* data);
-			~BitReference();
-			bool get_value() const;
-			void set_value(bool value);
-			const BitReference& operator=(const BitReference& that);
-			const BitReference& operator=(bool val);
-			bool operator==(bool that);
-		private:
-			std::size_t element_pos_, bit_pos_;
-			uint* data_;
-			//bool value_;
-		};
+		//! Overloded new opearetor
+		//!
+		//! @param size is size of data_array
+		//! @param n is number of elements
+		//! @param init_val is initial value for elements
+		void* operator new(std::size_t size, std::size_t n, int init_val);
+		//! Returns new proper capacity in terms of elements
+		//!
+		//! @param new_bits_size is a new needed size in terms of bits
+		std::size_t get_proper_new_element_capacity(std::size_t new_bits_size);
+		//! Converts bit count to element count
+		//!
+		//! @param bits_count is a count of bits that needed to be converted
+		std::size_t get_elements_count_from_bits_count(std::size_t bits_count);
 		const static std::size_t DEFAULT_ELEMENT_CAPACITY_ = 4;
 		const static size_t BITS_PER_ELEMENT_ = 32;
 		const static std::size_t DEFAULT_BITS_CAPACITY_ = DEFAULT_ELEMENT_CAPACITY_ * BITS_PER_ELEMENT_;
 		const static size_t CAPACITY_MULTIPLY_KOEFF = 2;
-		std::size_t capacity_;
-		std::size_t size_;
+		std::size_t bits_capacity_;
+		std::size_t bits_size_;
+		std::size_t elements_capacity_;
+		std::size_t elements_size_;
 		uint* data_;
 	};
 }
