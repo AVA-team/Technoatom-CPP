@@ -1,10 +1,10 @@
 # Technoatom-CPP
-Project with:
+#### Project with:
 - assembler, which convert source code of script in bynary file,
 - processor, which execute this bynary file.
 
 
-Source code supports commands:
+#### Source code supports commands:
 - push $i
 - push_reg $i
 - pop $i
