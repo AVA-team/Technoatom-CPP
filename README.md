@@ -20,5 +20,6 @@
 - jmpb :$i
 - jmpbe :$i
 - jmpne :$i
+- end
 
 where: $i - integer value of number, register number or tag number.

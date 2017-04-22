@@ -4,32 +4,57 @@
 #include <string>
 #include <vector>
 
-struct Command {
-    //! Name of command in source file.
-    const std::string name_;
-    //! Code of command in binary file.
-    const unsigned char code_;
-    //! Existing of one argument of command.
-    const bool argument_existing_;
-};
+namespace ava {
 
-//! Vector of availible in source code commands.
-const std::vector<Command> availible_commands = {
-													{"push",     0,  true },
-													{"push_reg", 1,  true },
-													{"pop",      2,  true },
-													{"add",      3,  false},
-													{"div",      4,  false},
-													{"mul",      5,  false},
-													{"call",     6,  true },
-													{"ret",      7,  false},
-													{"jmp",      8,  true },
-													{"jmpe",     9,  true },
-													{"jmpa",     10, true },
-													{"jmpae",    11, true },
-													{"jmpb",     12, true },
-													{"jmpbe",    12, true },
-													{"jmpne",    12, true }
-												};
+	//! Codes of commands for CPU.
+	enum Command_code : unsigned char {
+		PUSH,
+		PUSH_REG,
+		POP,
+		ADD,
+		DIV,
+		MUL,
+		RET,
+		CALL,
+		JMP,
+		JMPE,
+		JMPA,
+		JMPAE,
+		JMPB,
+		JMPBE,
+		JMPNE,
+		END
+	};
+
+	struct Command {
+		//! Name of command in source file.
+		const std::string name_;
+		//! Code of command in binary file.
+		Command_code code_;
+		//! Existing of one argument of command.
+		const bool argument_existing_;
+	};
+
+	//! Vector of availible in source code commands.
+	const std::vector<Command> availible_commands = {
+														{"push",     PUSH,     true },
+														{"push_reg", PUSH_REG, true },
+														{"pop",      POP,      true },
+														{"add",      ADD,      false},
+														{"div",      DIV,      false},
+														{"mul",      MUL,      false},
+														{"ret",      RET,      false},
+														{"call",     CALL,     true },
+														{"jmp",      JMP,      true },
+														{"jmpe",     JMPE,     true },
+														{"jmpa",     JMPA,     true },
+														{"jmpae",    JMPAE,    true },
+														{"jmpb",     JMPB,     true },
+														{"jmpbe",    JMPBE,    true },
+														{"jmpne",    JMPNE,    true },
+														{"end",      END,      false }
+	};
+
+}
 
 #endif //COMMAND_H_
