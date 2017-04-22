@@ -1,0 +1,18 @@
+push 1
+push_register 1
+push 2
+push_register 2
+push 1000
+push_register 3
+1:
+call 2
+pop_register 3
+jmpbe 1
+2:
+pop_register 1
+pop_register 2
+multiply
+push_register 2
+ret
+3:
+end

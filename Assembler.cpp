@@ -9,13 +9,21 @@
 
 namespace ava {
 
+	std::string trim_string(std::string& str) {
+		auto first = str.find_first_not_of(' '),
+			last = str.find_last_not_of(' ');
+		if (first == std::string::npos) {
+			return str;
+		}
+		return str.substr(first, last - first + 1);
+	}
 
 	Assembler::Assembler(std::string file_name) {
 		try {
 			file_redear_.chooseFile(file_name.c_str());
 		}
 		catch (...) {
-			crush_programm(std::string("File '") + file_name + std::string("' does not exist...\n"));
+			crush_programm(std::string("File '") + file_name + std::string("' can not be opened...\n"));
 		}
 	}
 
@@ -24,7 +32,7 @@ namespace ava {
 			file_redear_.chooseFile(file_name);
 		}
 		catch (...) {
-			crush_programm(std::string("File '") + file_name + std::string("' does not exist...\n"));
+			crush_programm(std::string("File '") + file_name + std::string("' can not be opened...\n"));
 		}
 	}
 
@@ -48,11 +56,14 @@ namespace ava {
 			generate_code_for_single_line(curr_str, i + 1);
 		}
 		std::ofstream of;
-		of.open(std::string("Byte_code_") + std::string(__TIME__) + std::string(".txt"));
-		auto bytes_count = code_.size();
-		for (size_t i = 0; i < bytes_count; i++)
+		std::stringstream ss;
+		ss << "Byte_code" << ".txt";
+		std::string fileName = ss.str();
+		of.open(fileName, std::ios::out);
+		auto code_lines_count = byte_code_.size();
+		for (size_t i = 0; i < code_lines_count; i++)
 		{
-			of << code_[i];
+			of << byte_code_[i];
 		}
 		of.close();
 	}
@@ -61,6 +72,7 @@ namespace ava {
 		std::stringstream ss;
 		ss << line_number;
 		std::string line_number_str = ss.str();
+		std::stringstream comand_code_string;
 		auto space_pos = command_line.find(' ');
 		auto command = command_line.substr(0, space_pos);
 		if (command == all_comands_[0].name_) {
@@ -73,114 +85,135 @@ namespace ava {
 				crush_programm("Error in Assembler::generate_code_for_single_line(std::string command_line): \
 					illegal comand argument. Argument is not a double number\n", ex);
 			}
-			code_.push_back(all_comands_[0].code_);
-			put_double_bytes_to_code(val_to_push);
+			comand_code_string << all_comands_[0].code_ << " " << val_to_push << "\n";
+			byte_code_.push_back(comand_code_string.str());
 		}
 		else if (command == all_comands_[1].name_) {
 			auto argument = command_line.substr(space_pos + 1, std::string::npos);
-			uchar reg_code;
+			int reg_code;
 			try {
-				reg_code = get_register_code(argument);
+				reg_code = std::stoi(argument);
 			}
-			catch (std::invalid_argument& ex) {
-				crush_programm(std::string("Error in Assembler::get_register_code(std::string reg_name):") + std::string(ex.what()));
+			catch (std::exception& ex) {
+				crush_programm(std::string("Error in Assembler::get_register_code(std::string reg_name):") + std::string(ex.what()) + std::string("\n Line number: ") + line_number_str);
 			}
-			code_.push_back(all_comands_[1].code_);
-			code_.push_back(reg_code);
+			comand_code_string << all_comands_[1].code_ << " " << reg_code << "\n";
+			byte_code_.push_back(comand_code_string.str());
 		}
 		else if (command == all_comands_[2].name_) {
 			auto argument = command_line.substr(space_pos + 1, std::string::npos);
-			uchar reg_code;
+			int reg_code;
 			try {
-				reg_code = get_register_code(argument);
+				reg_code = std::stoi(argument);
 			}
-			catch (std::invalid_argument& ex) {
-				crush_programm(std::string("Error in Assembler::get_register_code(std::string reg_name):") + std::string(ex.what()));
+			catch (std::exception& ex) {
+				crush_programm(std::string("Error in Assembler::get_register_code(std::string reg_name):") + std::string(ex.what()) + std::string("\n Line number: ") + line_number_str);
 			}
-			code_.push_back(all_comands_[2].code_);
-			code_.push_back(reg_code);
+			
+			comand_code_string << all_comands_[2].code_ << " " << reg_code << "\n";
+			byte_code_.push_back(comand_code_string.str());
 		}
 		else if (command == all_comands_[3].name_) {
-			code_.push_back(all_comands_[3].code_);
+			comand_code_string << all_comands_[3].code_ << "\n";
+			byte_code_.push_back(comand_code_string.str());
 		}
 		else if (command == all_comands_[4].name_) {
-			code_.push_back(all_comands_[4].code_);
+			comand_code_string << all_comands_[4].code_ << "\n";
+			byte_code_.push_back(comand_code_string.str());
 		}
 		else if (command == all_comands_[5].name_) {
-			code_.push_back(all_comands_[5].code_);
+			comand_code_string << all_comands_[5].code_ << "\n";
+			byte_code_.push_back(comand_code_string.str());
 		}
 		else if (command == all_comands_[6].name_) {
 			auto argument = command_line.substr(space_pos + 1, std::string::npos);
-			auto colon_pos = argument.find(':');
-			if (colon_pos == std::string::npos) {
-				crush_programm(std::string("Error in Assembler::generate_code_for_single_line(std::string command_line): \
-								illegal CALL comand\nLine number: ") + line_number_str);
-			}
-			auto flag_to_call = argument.substr(colon_pos + 1, std::string::npos);
+			argument = trim_string(argument);
 			int flag, adress;
 			try {
-				flag = std::stoi(flag_to_call);
+				flag = std::stoi(argument);
 			}
 			catch (...) {
 				crush_programm(std::string("Error in Assembler::generate_code_for_single_line(std::string command_line): illegal flag to call.\nError line: ")
 					+ line_number_str + std::string("\n"));
 			}
 			adress = references_[flag];
-			code_.push_back(all_comands_[6].code_);
-			put_int_bytes_to_code(adress);
+			comand_code_string << all_comands_[6].code_ << " " << adress << "\n";
+			byte_code_.push_back(comand_code_string.str());
 		}
 		else if (command == all_comands_[7].name_) {
-			code_.push_back(all_comands_[7].code_);
+			comand_code_string << all_comands_[7].code_ << "\n";
+			byte_code_.push_back(comand_code_string.str());
 		}
 		else if (command == all_comands_[8].name_) {
 			auto argument = command_line.substr(space_pos + 1, std::string::npos);
+			argument = trim_string(argument);
 			generate_code_for_jmp_commands(argument, JUMP_COMANDS::JMP, line_number_str);
 		}
 		else if (command == all_comands_[9].name_) {
 			auto argument = command_line.substr(space_pos + 1, std::string::npos);
+			argument = trim_string(argument);
 			generate_code_for_jmp_commands(argument, JUMP_COMANDS::JMPE, line_number_str);
 		}
 		else if (command == all_comands_[10].name_) {
 			auto argument = command_line.substr(space_pos + 1, std::string::npos);
+			argument = trim_string(argument);
 			generate_code_for_jmp_commands(argument, JUMP_COMANDS::JMPA, line_number_str);
 		}
 		else if (command == all_comands_[11].name_) {
 			auto argument = command_line.substr(space_pos + 1, std::string::npos);
+			argument = trim_string(argument);
 			generate_code_for_jmp_commands(argument, JUMP_COMANDS::JMPAE, line_number_str);
 		}
 		else if (command == all_comands_[12].name_) {
 			auto argument = command_line.substr(space_pos + 1, std::string::npos);
+			argument = trim_string(argument);
 			generate_code_for_jmp_commands(argument, JUMP_COMANDS::JMPB, line_number_str);
 		}
 		else if (command == all_comands_[13].name_) {
 			auto argument = command_line.substr(space_pos + 1, std::string::npos);
+			argument = trim_string(argument);
 			generate_code_for_jmp_commands(argument, JUMP_COMANDS::JMPBE, line_number_str);
 		}
 		else if (command == all_comands_[14].name_) {
 			auto argument = command_line.substr(space_pos + 1, std::string::npos);
+			argument = trim_string(argument);
 			generate_code_for_jmp_commands(argument, JUMP_COMANDS::JMPNE, line_number_str);
+		}
+		else if (command == all_comands_[15].name_) {
+			comand_code_string << all_comands_[15].code_ << "\n";
+			byte_code_.push_back(comand_code_string.str());
 		}
 	}
 
 	void Assembler::define_all_references() {
 		auto strings_count = file_redear_.lines_count();
 		std::string curr_str;
+		std::stringstream ss;
+		std::string curr_line_number;
 		for (size_t i = 0; i < strings_count - 1; i++)//до (strings_count - 1) тк метка не должна быть последней строкой в коде
 		{
+			ss << (i + 1);
+			curr_line_number = ss.str();
 			curr_str = file_redear_.get_line(i);
-			auto colon_pos = curr_str.find(':');
-			if (colon_pos == std::string::npos) {
+			curr_str = trim_string(curr_str);
+			auto string_size = curr_str.size();
+			if (string_size == 0) {
+				crush_programm(std::string("Empty string in source code. Number of error line: ") + curr_line_number + std::string("\n"));
+			}
+			char last_char = curr_str.at(string_size - 1);
+			if (last_char != ':') {
 				continue;
 			}
 			int reference_key;
-			auto argument = curr_str.substr(0, colon_pos);
+			auto argument = curr_str.substr(0, string_size - 1);
 			try {
-				reference_key = std::stoi(argument, nullptr);
+				reference_key = std::stoi(argument);
 			}
 			catch (std::exception& ex) {
-				crush_programm("Error in Assembler::define_all_references(): failed reference value\n", ex);
+				crush_programm(std::string("Error in Assembler::define_all_references(): failed reference value. Number of error line - \n") \
+				+ curr_line_number + std::string(".\n") + std::string(ex.what()) + std::string("\n"));
 			}
-			auto references_count = references_.size();
+			auto references_count = references_.size() + 1;//+ 1 тк сейчас мы добавим текущую метку
 			// +2: +1 - тк i начинается с 0 и ещё +1 - тк метка указывает на следующую после неё строку.
 			//-references_count тк номер строки не должен учитывать предыдущие строки с метками
 			auto actual_adress = i + 2 - references_count;
@@ -196,6 +229,7 @@ namespace ava {
 
 	void Assembler::crush_programm(const char* msg) {
 		std::cerr << msg << std::endl;
+		system("pause");
 		exit(1);
 	}
 
@@ -203,49 +237,19 @@ namespace ava {
 		crush_programm(msg.c_str());
 	}
 
-	void Assembler::put_double_bytes_to_code(double val) {
-		uchar argument_bytes[sizeof(double)];
-		memcpy(argument_bytes, &val, sizeof(double));
-		for (uchar byte : argument_bytes) {
-			code_.push_back(byte);
-		}
-	}
-
-	void Assembler::put_int_bytes_to_code(int val) {
-		uchar argument_bytes[sizeof(int)];
-		memcpy(argument_bytes, &val, sizeof(int));
-		for (uchar byte : argument_bytes) {
-			code_.push_back(byte);
-		}
-	}
-
-	uchar Assembler::get_register_code(std::string reg_name) {
-		for (auto valid_reg : valid_registers) {
-			if (reg_name == valid_reg.name_) {
-				return valid_reg.code_;
-			}
-		}
-		throw std::invalid_argument("Illegal register name");
-	}
-
 	void Assembler::generate_code_for_jmp_commands(std::string argument, Assembler::JUMP_COMANDS cmd_type, std::string line_number_str) {
-		auto colon_pos = argument.find(':');
-		if (colon_pos == std::string::npos) {
-			crush_programm(std::string("Error in Assembler::generate_code_for_single_line(std::string command_line): \
-								illegal JMP comand\nLine number: ") + line_number_str);
-		}
-		auto flag_to_call = argument.substr(colon_pos + 1, std::string::npos);
+		std::stringstream code_string_stream;
 		int flag, adress;
 		try {
-			flag = std::stoi(flag_to_call);
+			flag = std::stoi(argument);
 		}
 		catch (...) {
 			crush_programm(std::string("Error in Assembler::generate_code_for_single_line(std::string command_line): illegal flag to call.\nError line: ")
 				+ line_number_str + std::string("\n"));
 		}
 		adress = references_[flag];
-		code_.push_back((uchar)cmd_type);
-		put_int_bytes_to_code(adress);
+		code_string_stream << cmd_type << " " << adress << "\n";
+		byte_code_.push_back(code_string_stream.str());
 	}
 
 }

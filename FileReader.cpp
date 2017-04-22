@@ -19,8 +19,9 @@ namespace ava {
 		}
 		fin_.open(file_name);
 		std::string curr_str;
-		while (!(std::getline(fin_, curr_str).eof()))
+		while (!fin_.eof())
 		{
+			std::getline(fin_, curr_str);
 			all_strings_.push_back(curr_str);
 		}
 		fin_.close();
