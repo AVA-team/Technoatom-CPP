@@ -26,35 +26,35 @@ void ava::Processor::executable_file_bind(const std::string & file_name)
 void ava::Processor::process()
 {
 	load_code();
-	step = 0;
+	step_ = 0;
 	std::size_t code_size = code_.size();
-	while (code_.at(step) != END && step < code_size)
+	while (code_.at(step_) != END && step_ < code_size)
 	{
-		switch (code_[step])
+		switch (code_[step_])
 		{
 		case PUSH:
-			push(code_[step + 1]);
-			step += 2;
+			push(code_[step_ + 1]);
+			step_ += 2;
 			break;
 		case PUSH_REG:
-			push_reg(code_[step + 1]);
-			step += 2;
+			push_reg(code_[step_ + 1]);
+			step_ += 2;
 			break;
 		case POP:
-			pop(code_[step + 1]);
-			step += 2;
+			pop(code_[step_ + 1]);
+			step_ += 2;
 			break;
 		case ADD:
 			add();
-			++step;
+			++step_;
 			break;
 		case DIV:
 			div();
-			++step;
+			++step_;
 			break;
 		case MUL:
 			mul();
-			++step;
+			++step_;
 			break;
 		case RET:
 			ret();
@@ -63,7 +63,7 @@ void ava::Processor::process()
 			call();
 			break;
 		case JMP:
-			jmp(code_[step + 1]);
+			jmp(code_[step_ + 1]);
 			break;
 		case JMPE:
 		case JMPA:
@@ -89,10 +89,11 @@ void ava::Processor::show_state() const
 		std::cout << reg << " ";
 	}
 	std::cout << std::endl << "Data stack values (from top to bot):" << std::endl;
-	while (!data_stack_.empty())
+	auto tmp_data_stack = data_stack_;
+	while (!tmp_data_stack.empty())
 	{
-		std::cout << data_stack_.top() << " ";
-		data_stack_.pop();
+		std::cout << tmp_data_stack.top() << " ";
+		tmp_data_stack.pop();
 	}
 	std::cout << std::endl;
 }
@@ -175,18 +176,18 @@ void ava::Processor::ret()
 {
 	std::size_t next_step = call_stack_.top();
 	call_stack_.pop();
-	step = next_step;
+	step_ = next_step;
 }
 
 void ava::Processor::call()
 {
-	call_stack_.push(step + 2);
-	jmp(code_[step + 1]);
+	call_stack_.push(step_ + 2);
+	jmp(code_[step_ + 1]);
 }
 
 void ava::Processor::jmp(std::size_t command_ind)
 {
-	step = command_ind;
+	step_ = command_ind;
 }
 
 void ava::Processor::conditional_jmp_process()
@@ -196,17 +197,17 @@ void ava::Processor::conditional_jmp_process()
 	data_stack_.pop();
 	first_compared_num = data_stack_.top();
 	data_stack_.pop();
-	if ((code_[step] == JMPE  && first_compared_num == second_compared_num) ||
-		(code_[step] == JMPA  && first_compared_num >  second_compared_num) ||
-		(code_[step] == JMPAE && first_compared_num >= second_compared_num) ||
-		(code_[step] == JMPB  && first_compared_num <  second_compared_num) ||
-		(code_[step] == JMPBE && first_compared_num <= second_compared_num) ||
-		(code_[step] == JMPNE && first_compared_num != second_compared_num))
+	if ((code_[step_] == JMPE  && first_compared_num == second_compared_num) ||
+		(code_[step_] == JMPA  && first_compared_num >  second_compared_num) ||
+		(code_[step_] == JMPAE && first_compared_num >= second_compared_num) ||
+		(code_[step_] == JMPB  && first_compared_num <  second_compared_num) ||
+		(code_[step_] == JMPBE && first_compared_num <= second_compared_num) ||
+		(code_[step_] == JMPNE && first_compared_num != second_compared_num))
 	{
-		jmp(code_[step + 1]);
+		jmp(code_[step_ + 1]);
 	}
 	else
 	{
-		step += 2;
+		step_ += 2;
 	}
 }

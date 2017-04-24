@@ -36,7 +36,7 @@ namespace ava
 		std::stack<int> data_stack_;
 		std::stack<int> call_stack_;
 		void close_file_streams();
-		std::size_t step;
+		std::size_t step_;
 		void load_code();
 		void push(int value);
 		void push_reg(std::size_t reg_ind);
