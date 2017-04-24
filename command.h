@@ -5,7 +5,6 @@
 #include <vector>
 
 namespace ava {
-
 	//! Codes of commands for CPU.
 	enum Command_code : unsigned char {
 		PUSH,
@@ -54,7 +53,6 @@ namespace ava {
 														{"jmpne",    JMPNE,    true },
 														{"end",      END,      false }
 	};
-
 }
 
 #endif //COMMAND_H_

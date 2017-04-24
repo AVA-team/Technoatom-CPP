@@ -2,18 +2,26 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
-#include "Assembler.h"
+#include "assembler.h"
 
 namespace ava {
-
-	Assembler::Assembler(std::string file_name) :
-		source_filename_(file_name),
-		destination_filename_(std::string("assembly_") + file_name)
+	Assembler::Assembler()
 	{}
 
-	Assembler::~Assembler()
+	Assembler::Assembler(const std::string & source_file_name, const std::string & destination_file_name) :
+		source_filename_(source_file_name),
+		destination_filename_(destination_file_name)
 	{
-		if (fin_.is_open()) 
+		if(destination_filename_.empty())
+		{
+			destination_filename_ = std::string("assembly_") + source_filename_;
+		}
+	}
+
+
+	void Assembler::close_file_streams()
+	{
+		if (fin_.is_open())
 		{
 			fin_.close();
 		}
@@ -21,6 +29,23 @@ namespace ava {
 		{
 			fout_.close();
 		}
+	}
+
+	Assembler::~Assembler()
+	{
+		close_file_streams();
+	}
+
+	void Assembler::source_bind(const std::string & file_name)
+	{
+		close_file_streams();
+		source_filename_ = file_name;
+	}
+
+	void Assembler::destination_bind(const std::string & file_name)
+	{
+		close_file_streams();
+		destination_filename_ = file_name;
 	}
 
 	void Assembler::compile()
@@ -31,12 +56,6 @@ namespace ava {
 			throw std::exception("Error with source file open!");
 		}
 		define_all_references();
-		/*
-		for (auto it = references_.cbegin(); it != references_.cend(); ++it)
-		{
-			std::cout << it->first << " " << it->second <<  "\n";
-		}
-		*/
 		fin_.clear();
 		fin_.seekg(0, std::ios::beg);
 		fout_.open(destination_filename_);
@@ -45,8 +64,8 @@ namespace ava {
 			throw std::exception("Error with destination file open!");
 		}
 		parse_in_output();
-		fin_.close();
-		fout_.close();
+		close_file_streams();
+		std::cout << "Programm sucessfuly compiled and saved in the current directory\n";
 	}
 
 	void Assembler::define_all_references()
@@ -135,7 +154,7 @@ namespace ava {
 		}
 	}
 
-	bool Assembler::in_jmps_commands(Command_code code)
+	bool Assembler::in_jmps_commands(Command_code code) const
 	{
 		return (code == CALL) ||
 			   (code == JMP)  ||
@@ -146,6 +165,5 @@ namespace ava {
 			   (code == JMPBE)||
 			   (code == JMPNE);
 	}
-
 }
 
