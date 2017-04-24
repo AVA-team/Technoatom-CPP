@@ -81,7 +81,7 @@ void ava::Processor::process()
 	std::cout << "Programm sucessfuly executed\n";
 }
 
-void ava::Processor::show_state()
+void ava::Processor::show_state() const
 {
 	std::cout << "Registers values:" << std::endl;
 	for (auto & reg: registers_)

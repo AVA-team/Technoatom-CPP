@@ -26,7 +26,7 @@ namespace ava
 		~Processor();
 		void executable_file_bind(const std::string & file_name);
 		void process();
-		void show_state();
+		void show_state() const;
 		void set_data_stack(const std::vector<int> & data);
 	private:
 		std::string executable_file_name_;
