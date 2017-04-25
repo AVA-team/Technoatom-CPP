@@ -7,6 +7,7 @@
 #include <vector>
 #include <stack>
 #include <string>
+#include <functional>
 
 #ifndef REGISTERS_COUNT
 #define REGISTERS_COUNT 10
@@ -47,7 +48,7 @@ namespace ava
 		void ret();
 		void call();
 		void jmp(std::size_t command_ind);
-		void conditional_jmp_process();
+		void conditional_jmp_process(std::function<bool(int, int)> comporator);
 	};
 }
 

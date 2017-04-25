@@ -1,6 +1,5 @@
 #include "processor.h"
 #include "command.h"
-#include <string>
 #include <sstream>
 #include <iostream>
 
@@ -66,12 +65,22 @@ void ava::Processor::process()
 			jmp(code_[step_ + 1]);
 			break;
 		case JMPE:
+			conditional_jmp_process(std::equal_to<int>());
+			break;
 		case JMPA:
+			conditional_jmp_process(std::greater<int>());
+			break;
 		case JMPAE:
+			conditional_jmp_process(std::greater_equal<int>());
+			break;
 		case JMPB:
+			conditional_jmp_process(std::less<int>());
+			break;
 		case JMPBE:
+			conditional_jmp_process(std::less_equal<int>());
+			break;
 		case JMPNE:
-			conditional_jmp_process();
+			conditional_jmp_process(std::not_equal_to<int>());
 			break;
 		default:
 			throw std::exception("Error: not availible command!");
@@ -190,19 +199,14 @@ void ava::Processor::jmp(std::size_t command_ind)
 	step_ = command_ind;
 }
 
-void ava::Processor::conditional_jmp_process()
+void ava::Processor::conditional_jmp_process(std::function<bool(int, int)> comporator)
 {
 	int second_compared_num = data_stack_.top(),
 		first_compared_num;
 	data_stack_.pop();
 	first_compared_num = data_stack_.top();
 	data_stack_.pop();
-	if ((code_[step_] == JMPE  && first_compared_num == second_compared_num) ||
-		(code_[step_] == JMPA  && first_compared_num >  second_compared_num) ||
-		(code_[step_] == JMPAE && first_compared_num >= second_compared_num) ||
-		(code_[step_] == JMPB  && first_compared_num <  second_compared_num) ||
-		(code_[step_] == JMPBE && first_compared_num <= second_compared_num) ||
-		(code_[step_] == JMPNE && first_compared_num != second_compared_num))
+	if (comporator(first_compared_num, second_compared_num))
 	{
 		jmp(code_[step_ + 1]);
 	}
