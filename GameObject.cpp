@@ -38,25 +38,6 @@ namespace ava {
 		float new_y = position_.y + addY;
 		float x_size = (float)bound_size.x;
 		float y_size = (float)bound_size.y;
-		/*if (new_x > x_size) {
-			position_.x = x_size;
-			sprite_.move(sf::Vector2f())
-		}
-		else if (new_x < 0) {
-			position_.x = 0;
-		}
-		else {
-			position_.x = new_x;
-		}
-		if (new_y > y_size) {
-			position_.y = y_size;
-		}
-		else if (new_y < 0) {
-			position_.y = 0;
-		}
-		else {
-			position_.y = new_y;
-		}*/
 		if (new_x >= 0 && new_x <= x_size) {
 			position_.x = new_x;
 			sprite_.move(sf::Vector2f(addX, 0));
