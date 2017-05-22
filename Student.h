@@ -1,13 +1,17 @@
 #ifndef _AVA_STUDENT_H_
 #define _AVA_STUDENT_H_
 
+#include"GameCharacter.h"
+
 namespace ava {
 
-	class Student
+	class Student : public GameCharacter
 	{
 	public:
-		Student();
+		Student(sf::Vector2f position);
 		~Student();
+	private:
+		static const sf::Vector2f DEFAULT_VELOCITY;
 	};
 
 }

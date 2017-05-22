@@ -12,7 +12,7 @@ namespace ava {
 	}
 
 	sf::RenderWindow* MainSingletoneRenderWindow::getInstance() {
-		static sf::RenderWindow instance(sf::VideoMode(1024, 800), "AVA_GAME");
+		static sf::RenderWindow instance(sf::VideoMode(800, 600), "AVA_GAME");
 		return &instance;
 	}
 

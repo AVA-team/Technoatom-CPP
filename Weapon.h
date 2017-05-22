@@ -8,8 +8,12 @@ namespace ava {
 	class Weapon : public GameObject
 	{
 	public:
-		Weapon();
+		Weapon(sf::Vector2f position, sf::Vector2f velocity);
 		~Weapon();
+		bool is_need() const;
+		void set_is_need(bool val);
+	private:
+		bool is_need_;
 	};
 
 }

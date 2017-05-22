@@ -2,13 +2,16 @@
 
 namespace ava {
 
-	GameCharacter::GameCharacter()
-	{
+	GameCharacter::GameCharacter(sf::Vector2f position, sf::Vector2f velocity = sf::Vector2f(1.0F, 1.0F)) :
+		GameObject(position, velocity), hp_(INITIAL_HP){ }
+
+	GameCharacter::~GameCharacter(){ }
+
+	void GameCharacter::damage() {
+		hp_ -= ONE_HIT_DAMAGE;
 	}
 
-
-	GameCharacter::~GameCharacter()
-	{
+	bool GameCharacter::is_die() {
+		return hp_ <= 0;
 	}
-
 }

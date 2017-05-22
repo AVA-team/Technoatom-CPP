@@ -4,12 +4,17 @@
 #include"GameObject.h"
 
 namespace ava {
-
 	class GameCharacter : public GameObject
 	{
 	public:
-		GameCharacter();
+		const static int INITIAL_HP = 100, ONE_HIT_DAMAGE = 50;
+		GameCharacter(sf::Vector2f position, sf::Vector2f velocity);
 		~GameCharacter();
+		void damage();
+		bool is_die();
+	protected:
+		int hp_;
+
 	};
 
 }
