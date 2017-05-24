@@ -34,7 +34,7 @@ namespace ava {
 			create_new_enimy();
 			time_ = 0;
 		}
-		auto alive_student = std::find_if(enimies_.begin(), enimies_.end(), [this](std::shared_ptr<Student>& student)->bool {return student->get_position().y >= bound_size_.y; });
+		auto alive_student = std::find_if(enimies_.begin(), enimies_.end(), [this](std::shared_ptr<Student>& student)->bool {return student->get_position().y >= ebs_->get_position().y; });
 		if (alive_student != enimies_.end()) {
 			is_game_over_ = true;
 		}
@@ -65,8 +65,10 @@ namespace ava {
 		enimies_.erase(std::remove_if(enimies_.begin(), enimies_.end(), [](std::shared_ptr<Student>& student) -> bool {return student->is_die(); }), enimies_.end());
 	}
 
-	void GameEngine::fire() {
-		formulas_.push_back(std::unique_ptr<Formula>(ebs_->fire()));
+	void GameEngine::fire(float dt) {
+		auto* p_formula = ebs_->fire(dt);
+		if(p_formula)
+			formulas_.push_back(std::unique_ptr<Formula>(p_formula));
 	}
 
 	void GameEngine::draw_scene(sf::RenderTarget* target) {

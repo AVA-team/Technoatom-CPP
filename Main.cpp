@@ -12,7 +12,7 @@ int main()
 	sf::Clock clock;
 	sf::Keyboard::Key left_key = sf::Keyboard::Left;
 	sf::Keyboard::Key right_key = sf::Keyboard::Right;
-	while (window->isOpen() && !engine.is_game_over())
+	while (window->isOpen())
 	{
 		float dt = clock.restart().asSeconds();
 		sf::Event event;
@@ -21,8 +21,11 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window->close();
 		}
+		if (engine.is_game_over()) {
+			window->close();
+		}
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-			engine.fire();
+			engine.fire(dt);
 		}
 		if (sf::Keyboard::isKeyPressed(left_key)) {
 			engine.do_iteration(left_key, dt);

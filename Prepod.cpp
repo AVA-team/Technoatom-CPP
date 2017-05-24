@@ -2,18 +2,25 @@
 
 namespace ava {
 
-	const float Prepod::x_abs_velocity = 80;
+	const float Prepod::x_abs_velocity = 200;
 
 	Prepod::Prepod(sf::Vector2f position)
-		: GameCharacter(position, sf::Vector2f(0, x_abs_velocity)), pressed_key_(sf::Keyboard::Unknown)
+		: GameCharacter(position, sf::Vector2f(0, x_abs_velocity)), pressed_key_(sf::Keyboard::Unknown), time_to_fire(0)
 	{
 		texture_.loadFromFile("Images//Ebs.jpg");
 		sprite_.setTexture(texture_);
 		initialize_position_and_size();
 	}
 
-	Formula* Prepod::fire() const {
-		return new Formula(sprite_.getPosition());
+	Formula* Prepod::fire(float dt) {
+		time_to_fire -= dt;
+		if (time_to_fire <= 0) {
+			time_to_fire += 0.5;
+			return new Formula(sprite_.getPosition());
+		}
+		else {
+			return nullptr;
+		}
 	}
 
 	void Prepod::set_pressed_key(sf::Keyboard::Key pressed_key) {

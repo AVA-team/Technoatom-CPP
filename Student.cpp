@@ -2,7 +2,7 @@
 
 namespace ava {
 
-	const sf::Vector2f Student::DEFAULT_VELOCITY = sf::Vector2f(0, 3.0F);
+	const sf::Vector2f Student::DEFAULT_VELOCITY = sf::Vector2f(0, 20.0F);
 
 	Student::Student(sf::Vector2f position) : GameCharacter(position, DEFAULT_VELOCITY)
 	{

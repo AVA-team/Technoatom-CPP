@@ -8,6 +8,9 @@ namespace ava {
 	class MainSingletoneRenderWindow
 	{
 	public:
+		//! Возвращает единственный экземпляр главного окна
+		//!
+		//! @return указатель на синглтон главного окна
 		static sf::RenderWindow* getInstance();
 	private:
 		MainSingletoneRenderWindow();
